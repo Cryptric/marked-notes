@@ -7,3 +7,12 @@
 .md p, .md li {
   color: s.$t;
 }
+
+.md .mermaid {
+  display: flex;
+  justify-content: center;
+}
+
+.md svg {
+  overflow: visible;
+}
