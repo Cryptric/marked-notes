@@ -1,1 +1,13 @@
-<router-outlet></router-outlet>
+<div class="main-frame-div">
+  <as-split direction="horizontal">
+    <as-split-area [size]="40">
+      <app-sidebar></app-sidebar>
+    </as-split-area>
+    <as-split-area>
+      <app-editor [(markdownCode)]="markdownCode"></app-editor>
+    </as-split-area>
+    <as-split-area [size]="60">
+      <app-preview [markdownCode]="markdownCode"></app-preview>
+    </as-split-area>
+  </as-split>
+</div>

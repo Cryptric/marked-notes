@@ -9,6 +9,9 @@ import { APP_CONFIG } from '../environments/environment';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+
+  public markdownCode: string = "";
+
   constructor(
     private electronService: ElectronService,
     private translate: TranslateService

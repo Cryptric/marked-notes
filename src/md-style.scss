@@ -1,0 +1,9 @@
+@use 'styles.scss' as s;
+
+.md h1 {
+  color: s.$h;
+}
+
+.md p, .md li {
+  color: s.$t;
+}
