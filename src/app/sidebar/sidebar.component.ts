@@ -1,13 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { notStrictEqual } from 'assert';
+import { DirNode } from '../model/dir-node';
+import { Notebook } from '../model/notebook';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnChanges {
 
-  nodes = [
+  @Input() notebooks: Notebook[];
+
+  nodes = [ /*
     {
       id: 1,
       name: 'root1',
@@ -29,14 +34,41 @@ export class SidebarComponent implements OnInit {
           ]
         }
       ]
-    }
+    } */
   ];
 
   options = {};
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.notebooks.forEach(x => this.notebookToTree(x));
+  }
+
+  private notebookToTree(notebook: Notebook): void {
+    let root: DirNode = notebook.dir;
+    this.nodes.push(this.dfs(root));
+
+  }
+
+  private dfs(node: DirNode): any {
+    let treeNode = { name: node.name, children: [], dirNode: node};
+
+    if (node.isDir) {
+      for (let child of node.children) {
+        treeNode.children.push(this.dfs(child));
+      }
+    }
+
+    return treeNode;
+  }
+
+  public onNodeActivate(event: any) {
+    console.log(event);
   }
 
 }
