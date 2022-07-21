@@ -1,5 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { notStrictEqual } from 'assert';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { DirNode } from '../model/dir-node';
 import { Notebook } from '../model/notebook';
 
@@ -11,6 +10,7 @@ import { Notebook } from '../model/notebook';
 export class SidebarComponent implements OnInit, OnChanges {
 
   @Input() notebooks: Notebook[];
+  @Output() selectedFile = new EventEmitter<DirNode>();
 
   nodes = [ /*
     {
@@ -68,7 +68,7 @@ export class SidebarComponent implements OnInit, OnChanges {
   }
 
   public onNodeActivate(event: any) {
-    console.log(event);
+    this.selectedFile.emit(event.node.data.dirNode);
   }
 
 }

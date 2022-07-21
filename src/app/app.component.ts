@@ -5,6 +5,7 @@ import { APP_CONFIG } from '../environments/environment';
 import { ConfigLoader } from './helper/config-loader';
 import { Config } from './model/config';
 import { Notebook } from './model/notebook';
+import { DirNode } from './model/dir-node';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,7 @@ import { Notebook } from './model/notebook';
 export class AppComponent {
 
   public markdownCode: string = "";
+  public openedFile: DirNode;
 
   public config: Config;
 
@@ -38,4 +40,18 @@ export class AppComponent {
       console.log('Run in browser');
     }
   }
+
+  public selectFile(dirNode: DirNode) {
+    if (!dirNode.isDir) {
+      if (dirNode.name.toLowerCase().endsWith('.md')) {
+        this.openedFile = dirNode;
+        this.markdownCode = this.electronService.fs.readFileSync(dirNode.path).toString();
+      }
+    }
+  }
+
+  public save(): void {
+    console.log("save");
+  }
+
 }

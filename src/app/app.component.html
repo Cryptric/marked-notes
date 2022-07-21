@@ -1,7 +1,7 @@
 <div class="main-frame-div">
   <as-split direction="horizontal">
     <as-split-area [size]="40">
-      <app-sidebar [notebooks]="config.notebooks"></app-sidebar>
+      <app-sidebar [notebooks]="config.notebooks" (selectedFile)="selectFile($event)"></app-sidebar>
     </as-split-area>
     <as-split-area>
       <app-editor [(markdownCode)]="markdownCode"></app-editor>
