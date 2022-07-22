@@ -20,7 +20,6 @@ export class ConfigLoader {
       for (let i = 0; i < config.notebooks.length; i++) {
         config.notebooks[i] = Object.assign(new Notebook(), config.notebooks[i]);
       }
-      console.log(config.notebooks);
     } else {
       config = new Config();
     }

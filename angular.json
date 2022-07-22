@@ -35,8 +35,8 @@
             ],
             "styles": [
               "src/styles.scss",
+              "src/fonts.scss",
               "src/md-style.scss",
-              "node_modules/@circlon/angular-tree-component/css/angular-tree-component.css",
               "node_modules/prismjs/themes/prism-okaidia.css",
               "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",
               "node_modules/katex/dist/katex.min.css"

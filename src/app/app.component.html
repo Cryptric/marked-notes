@@ -1,12 +1,12 @@
 <div class="main-frame-div">
   <as-split direction="horizontal">
-    <as-split-area [size]="40">
+    <as-split-area [size]="10">
       <app-sidebar [notebooks]="config.notebooks" (selectedFile)="selectFile($event)"></app-sidebar>
     </as-split-area>
-    <as-split-area>
+    <as-split-area [size]="45">
       <app-editor [(markdownCode)]="markdownCode"></app-editor>
     </as-split-area>
-    <as-split-area [size]="60">
+    <as-split-area [size]="45">
       <app-preview [markdownCode]="markdownCode"></app-preview>
     </as-split-area>
   </as-split>
