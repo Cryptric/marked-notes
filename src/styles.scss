@@ -29,6 +29,49 @@ p {
   height: 100%;
 }
 
+.icon {
+  background-color: $h;
+  background-image: none;
+  height: 30px;
+  width: 30px;
+  margin: 5px 10px;
+  background-size: contain;
+  display: inline-block;
+  position: relative;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.edit {
+  -webkit-mask:  url("./assets/icons/edit.svg") no-repeat 100% 100%;
+  mask:  url("./assets/icons/edit.svg") no-repeat 100% 100%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+}
+
+.new-file {
+  height: 30px;
+  width: 30px;
+  -webkit-mask:  url("./assets/icons/note-add.svg") no-repeat 100% 100%;
+  mask:  url("./assets/icons/note-add.svg") no-repeat 100% 100%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+}
+
+.new-folder {
+  -webkit-mask:  url("./assets/icons/folder-add.svg") no-repeat 100% 100%;
+  mask:  url("./assets/icons/folder-add.svg") no-repeat 100% 100%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+}
+
+.add {
+  -webkit-mask:  url("./assets/icons/add.svg") no-repeat 100% 100%;
+  mask:  url("./assets/icons/add.svg") no-repeat 100% 100%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+}
+
 /***** Tree styling *****/
 .tree-node {
   color: $h;
@@ -123,4 +166,8 @@ tree-root .angular-tree-component-rtl .tree-children {
 
 tree-node-checkbox {
   padding: 1px;
+}
+
+tree-viewport {
+  height: calc(100% - 44px);
 }

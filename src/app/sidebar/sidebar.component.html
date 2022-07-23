@@ -1,3 +1,9 @@
 <div class="content-div">
+  <div class="file-button-bar-div">
+    <span class="icon add"></span>
+    <span class="icon new-folder"></span>
+    <span class="icon new-file"></span>
+    <span class="icon edit"></span>
+  </div>
   <tree-root [nodes]="nodes" [options]="options" (activate)="onNodeActivate($event)"></tree-root>
 </div>
