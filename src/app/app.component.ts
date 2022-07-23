@@ -125,4 +125,26 @@ export class AppComponent {
     }
   }
 
+  public delete(): void {
+    if (this.openedFile) {
+      let path = this.openedFile.path;
+      if (this.electronService.fs.statSync(path).isDirectory()) {
+        this.electronService.fs.rmdirSync(path, { recursive: true });
+        let i = -1;
+        this.config.notebooks.forEach((value, index) => {
+          if (value.path === path) {
+            i = index;
+          }
+        });
+        if (i != 0) {
+          this.config.notebooks.splice(i, 1);
+          this.configLoader.saveConfig(this.config);
+        }
+      } else {
+        this.electronService.fs.rmSync(path);
+      }
+    }
+    this.sidebarComponent.removeSelectedNode();
+  }
+
 }

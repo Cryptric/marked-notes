@@ -1,3 +1,4 @@
+import { ThisReceiver } from '@angular/compiler';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { TreeComponent } from '@circlon/angular-tree-component';
 import { DirNode } from '../model/dir-node';
@@ -15,6 +16,7 @@ export class SidebarComponent implements OnInit, OnChanges {
   @Output() newNotebook = new EventEmitter();
   @Output() newFolder = new EventEmitter();
   @Output() newFile = new EventEmitter();
+  @Output() delete = new EventEmitter();
 
   @ViewChild(TreeComponent)
   private tree: TreeComponent;
@@ -63,6 +65,16 @@ export class SidebarComponent implements OnInit, OnChanges {
     this.activeTreeNode.data.children.push({name: dirNode.name, children: [], dirNode: dirNode});
     this.tree.treeModel.update();
     this.tree.treeModel.focusDrillDown();
+  }
+
+  public removeSelectedNode(): void {
+    let parent = this.activeTreeNode.parent;
+    let id = this.activeTreeNode.data.id;
+    if (parent) {
+      const index = parent.data.children.indexOf(this.activeTreeNode.data);
+      parent.data.children.splice(index, 1);
+    }
+    this.tree.treeModel.update();
   }
 
 }

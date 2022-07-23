@@ -112,6 +112,12 @@ input[type="text"] {
   mask-size: cover;
 }
 
+.delete {
+  -webkit-mask:  url("./assets/icons/delete.svg") no-repeat 100% 100%;
+  mask:  url("./assets/icons/delete.svg") no-repeat 100% 100%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+}
 
 /***** Tree styling *****/
 .tree-node {

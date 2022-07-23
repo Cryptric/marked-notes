@@ -4,6 +4,7 @@
     <span class="icon new-folder" (click)="newFolder.emit()"></span>
     <span class="icon new-file" (click)="newFile.emit()"></span>
     <span class="icon edit"></span>
+    <span class="icon delete" (click)="delete.emit()"></span>
   </div>
   <tree-root [nodes]="nodes" [options]="options" (activate)="onNodeActivate($event)" #tree></tree-root>
 </div>
