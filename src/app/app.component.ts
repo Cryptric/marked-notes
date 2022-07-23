@@ -14,6 +14,10 @@ import { DirNode } from './model/dir-node';
 })
 export class AppComponent {
 
+  public newNotebookDialogOpen: boolean = false;
+  public newNotebookName: string = "";
+  public newNotebookLocation: string = "";
+
   public markdownCode: string = "";
   public openedFile: DirNode;
 
@@ -54,6 +58,27 @@ export class AppComponent {
   public save(): void {
     if (this.openedFile) {
       this.electronService.fs.writeFileSync(this.openedFile.path, this.markdownCode);
+    }
+  }
+
+  public createNewNotebook(): void {
+    let notebook = new Notebook();
+    notebook.name = this.newNotebookName;
+    notebook.path = this.newNotebookLocation;
+    notebook.createNotebook(this.electronService.fs);
+    this.newNotebookDialogOpen = false;
+    this.newNotebookName = "";
+    this.newNotebookLocation = "";
+    notebook.readNotebook(this.electronService.fs);
+    this.config.notebooks.push(notebook);
+    this.config.notebooks = [].concat(this.config.notebooks); // to trigger ngOnChange
+    this.configLoader.saveConfig(this.config);
+  }
+
+  public openDirectoryDialog(): void {
+    let response = this.electronService.ipcRenderer.sendSync("selectDir");
+    if (response) {
+      this.newNotebookLocation = response[0];
     }
   }
 

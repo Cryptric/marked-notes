@@ -26,4 +26,15 @@ export class ConfigLoader {
     return config;
   }
 
+  public saveConfig(config: Config): void {
+    let json = JSON.stringify(config, (key, value) => {
+      if (key === 'dir') {
+        return undefined;
+      }
+      return value;
+    });
+    this.fs.writeFileSync(ConfigLoader.CONFIG_PATH, json);
+
+  }
+
 }

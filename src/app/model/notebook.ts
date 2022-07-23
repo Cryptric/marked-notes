@@ -31,4 +31,16 @@ export class Notebook {
       }
     }
   }
+
+  public createNotebook(fs: any) {
+    if (!this.path.endsWith(this.name)) {
+      this.path = this.path + "/" + this.name;
+    }
+    if (!fs.existsSync(this.path)) {
+      fs.mkdirSync(this.path);
+    }
+    if (!fs.existsSync(this.path + "/images")) {
+      fs.mkdirSync(this.path + "/images");
+    }
+  }
 }

@@ -22,11 +22,29 @@ p {
   color: $t;
 }
 
+h1 {
+  font-family: $f;
+  color: $h;
+  margin: 10px;
+}
+
+
 
 .content-div {
   padding: 10px;
   box-sizing: border-box;
   height: 100%;
+}
+
+input[type="text"] {
+  border: none;
+  background: none;
+  border-bottom: 1px solid $h;
+  font-family: $f;
+  font-size: large;
+  color: $t;
+  box-shadow: none;
+  outline: none;
 }
 
 .icon {
@@ -40,6 +58,7 @@ p {
   position: relative;
   background-repeat: no-repeat;
   background-position: center;
+  cursor: pointer;
 }
 
 .edit {
@@ -71,6 +90,28 @@ p {
   -webkit-mask-size: cover;
   mask-size: cover;
 }
+
+.folder-open {
+  -webkit-mask:  url("./assets/icons/folder-open.svg") no-repeat 100% 100%;
+  mask:  url("./assets/icons/folder-open.svg") no-repeat 100% 100%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+}
+
+.close {
+  -webkit-mask:  url("./assets/icons/close.svg") no-repeat 100% 100%;
+  mask:  url("./assets/icons/close.svg") no-repeat 100% 100%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+}
+
+.done {
+  -webkit-mask:  url("./assets/icons/done.svg") no-repeat 100% 100%;
+  mask:  url("./assets/icons/done.svg") no-repeat 100% 100%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+}
+
 
 /***** Tree styling *****/
 .tree-node {

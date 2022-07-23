@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, screen, ipcMain, dialog} from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as url from 'url';
@@ -14,8 +14,8 @@ function createWindow(): BrowserWindow {
 
   // Create the browser window.
   win = new BrowserWindow({
-    x: 20,
-    y: 20,
+    x: 40,
+    y: 40,
     width: 1920,
     height: 1080,
     webPreferences: {
@@ -86,3 +86,12 @@ try {
   // Catch Error
   // throw e;
 }
+
+let dir;
+
+ipcMain.on('selectDir', (event, arg) => {
+  dir = dialog.showOpenDialogSync(win, {
+    properties: ['openDirectory']
+  });
+  event.returnValue = dir;
+})

@@ -11,6 +11,7 @@ export class SidebarComponent implements OnInit, OnChanges {
 
   @Input() notebooks: Notebook[];
   @Output() selectedFile = new EventEmitter<DirNode>();
+  @Output() newNotebook = new EventEmitter();
 
   nodes = [ /*
     {
@@ -46,6 +47,7 @@ export class SidebarComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    this.nodes = [];
     this.notebooks.forEach(x => this.notebookToTree(x));
   }
 
