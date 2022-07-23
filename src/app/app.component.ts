@@ -98,13 +98,30 @@ export class AppComponent {
       this.sidebarComponent.addNode(dir);
       this.electronService.fs.mkdirSync(path);
       this.newFolderDialogOpen = false;
-      this.newFileFolderName = "";
+    } else if (this.newFileDialogOpen) {
+      if (!this.newFileFolderName.includes('.')) {
+        this.newFileFolderName += ".md";
+      }
+      let path = this.openedFile.path + "/" + this.newFileFolderName;
+      let dir = new DirNode(path, this.newFileFolderName, false);
+      this.openedFile.children.push(dir);
+      this.sidebarComponent.addNode(dir);
+      this.electronService.fs.writeFileSync(path, '');
+      this.newFileDialogOpen = false;
+
     }
+    this.newFileFolderName = "";
   }
 
   public openNewFolderDialog(): void {
     if (this.openedFile && this.openedFile.isDir) {
       this.newFolderDialogOpen = true;
+    }
+  }
+
+  public openNewFileDialog(): void {
+    if (this.openedFile && this.openedFile.isDir) {
+      this.newFileDialogOpen = true;
     }
   }
 

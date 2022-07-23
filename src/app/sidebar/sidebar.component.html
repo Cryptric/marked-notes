@@ -2,7 +2,7 @@
   <div class="file-button-bar-div">
     <span class="icon add" (click)="newNotebook.emit()"></span>
     <span class="icon new-folder" (click)="newFolder.emit()"></span>
-    <span class="icon new-file"></span>
+    <span class="icon new-file" (click)="newFile.emit()"></span>
     <span class="icon edit"></span>
   </div>
   <tree-root [nodes]="nodes" [options]="options" (activate)="onNodeActivate($event)" #tree></tree-root>

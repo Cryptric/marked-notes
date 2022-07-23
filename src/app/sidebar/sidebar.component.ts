@@ -14,6 +14,7 @@ export class SidebarComponent implements OnInit, OnChanges {
   @Output() selectedFile = new EventEmitter<DirNode>();
   @Output() newNotebook = new EventEmitter();
   @Output() newFolder = new EventEmitter();
+  @Output() newFile = new EventEmitter();
 
   @ViewChild(TreeComponent)
   private tree: TreeComponent;
