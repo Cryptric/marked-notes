@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { ElectronService } from './core/services';
 import { TranslateService } from '@ngx-translate/core';
 import { APP_CONFIG } from '../environments/environment';
@@ -6,6 +6,7 @@ import { ConfigLoader } from './helper/config-loader';
 import { Config } from './model/config';
 import { Notebook } from './model/notebook';
 import { DirNode } from './model/dir-node';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @Component({
   selector: 'app-root',
@@ -14,9 +15,16 @@ import { DirNode } from './model/dir-node';
 })
 export class AppComponent {
 
+  @ViewChild(SidebarComponent)
+  private sidebarComponent: SidebarComponent;
+
   public newNotebookDialogOpen: boolean = false;
   public newNotebookName: string = "";
   public newNotebookLocation: string = "";
+
+  public newFolderDialogOpen: boolean = false;
+  public newFileDialogOpen: boolean = false;
+  public newFileFolderName: string = "";
 
   public markdownCode: string = "";
   public openedFile: DirNode;
@@ -46,9 +54,9 @@ export class AppComponent {
   }
 
   public selectFile(dirNode: DirNode) {
+    this.openedFile = dirNode;
     if (!dirNode.isDir) {
       if (dirNode.name.toLowerCase().endsWith('.md')) {
-        this.openedFile = dirNode;
         this.markdownCode = this.electronService.fs.readFileSync(dirNode.path).toString();
       }
     }
@@ -79,6 +87,24 @@ export class AppComponent {
     let response = this.electronService.ipcRenderer.sendSync("selectDir");
     if (response) {
       this.newNotebookLocation = response[0];
+    }
+  }
+
+  public createNewFileFolder(): void {
+    if (this.newFolderDialogOpen) {
+      let path = this.openedFile.path + "/" + this.newFileFolderName;
+      let dir = new DirNode(path, this.newFileFolderName, true);
+      this.openedFile.children.push(dir);
+      this.sidebarComponent.addNode(dir);
+      this.electronService.fs.mkdirSync(path);
+      this.newFolderDialogOpen = false;
+      this.newFileFolderName = "";
+    }
+  }
+
+  public openNewFolderDialog(): void {
+    if (this.openedFile && this.openedFile.isDir) {
+      this.newFolderDialogOpen = true;
     }
   }
 

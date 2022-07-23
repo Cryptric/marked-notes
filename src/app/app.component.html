@@ -1,7 +1,7 @@
 <div class="main-frame-div">
   <as-split direction="horizontal">
     <as-split-area [size]="20">
-      <app-sidebar [notebooks]="config.notebooks" (selectedFile)="selectFile($event)" (newNotebook)="newNotebookDialogOpen = true"></app-sidebar>
+      <app-sidebar [notebooks]="config.notebooks" (selectedFile)="selectFile($event)" (newNotebook)="newNotebookDialogOpen = true" (newFolder)="openNewFolderDialog()"></app-sidebar>
     </as-split-area>
     <as-split-area [size]="40">
       <app-editor [(markdownCode)]="markdownCode"></app-editor>
@@ -11,8 +11,8 @@
     </as-split-area>
   </as-split>
 </div>
-<div class="overlay" *ngIf="newNotebookDialogOpen"></div>
-<div class="dialog-div" *ngIf="newNotebookDialogOpen">
+<div class="overlay" *ngIf="newNotebookDialogOpen || newFolderDialogOpen || newFileDialogOpen"></div>
+<div class="dialog-div" *ngIf="newNotebookDialogOpen || newFolderDialogOpen || newFileDialogOpen">
   <div class="dialog-content-div">
     <div id="new-notebook-dialog" *ngIf="newNotebookDialogOpen">
       <h1>Create a new notebook</h1>
@@ -24,6 +24,15 @@
       <div class="dialog-button-bar">
         <span class="icon close" (click)="newNotebookDialogOpen = false"></span>
         <span class="icon done" (click)="createNewNotebook()"></span>
+      </div>
+    </div>
+    <div id="new-file-folder-dialog" *ngIf="newFolderDialogOpen || newFileDialogOpen">
+      <h1 *ngIf="newFolderDialogOpen">Create new folder</h1>
+      <h1 *ngIf="newFileDialogOpen">Create new file</h1>
+      <input type="text" id="new-file-folder-name-input" placeholder="name" [(ngModel)]="newFileFolderName">
+      <div class="dialog-button-bar">
+        <span class="icon close" (click)="newFolderDialogOpen = newFileDialogOpen = false"></span>
+        <span class="icon done" (click)="createNewFileFolder()"></span>
       </div>
     </div>
   </div>

@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { TreeComponent } from '@circlon/angular-tree-component';
 import { DirNode } from '../model/dir-node';
 import { Notebook } from '../model/notebook';
 
@@ -12,33 +13,16 @@ export class SidebarComponent implements OnInit, OnChanges {
   @Input() notebooks: Notebook[];
   @Output() selectedFile = new EventEmitter<DirNode>();
   @Output() newNotebook = new EventEmitter();
+  @Output() newFolder = new EventEmitter();
 
-  nodes = [ /*
-    {
-      id: 1,
-      name: 'root1',
-      children: [
-        { id: 2, name: 'child1' },
-        { id: 3, name: 'child2' }
-      ]
-    },
-    {
-      id: 4,
-      name: 'root2',
-      children: [
-        { id: 5, name: 'child2.1' },
-        {
-          id: 6,
-          name: 'child2.2',
-          children: [
-            { id: 7, name: 'subsub' }
-          ]
-        }
-      ]
-    } */
-  ];
+  @ViewChild(TreeComponent)
+  private tree: TreeComponent;
+
+  nodes = [ ];
 
   options = {};
+
+  activeTreeNode: any;
 
   constructor() {
   }
@@ -70,7 +54,14 @@ export class SidebarComponent implements OnInit, OnChanges {
   }
 
   public onNodeActivate(event: any) {
+    this.activeTreeNode = event.node;
     this.selectedFile.emit(event.node.data.dirNode);
+  }
+
+  public addNode(dirNode: DirNode): void {
+    this.activeTreeNode.data.children.push({name: dirNode.name, children: [], dirNode: dirNode});
+    this.tree.treeModel.update();
+    this.tree.treeModel.focusDrillDown();
   }
 
 }
