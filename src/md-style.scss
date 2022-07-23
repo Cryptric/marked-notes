@@ -3,6 +3,37 @@
 .md h1 {
   color: s.$h;
   margin: 10px 0px;
+  border-bottom: 2px solid s.$h;
+}
+
+.md h2 {
+  color: s.$h;
+  margin: 10px 0px;
+  border-bottom: 1px solid s.$h;
+}
+
+.md h3 {
+  color: s.$hc;
+  margin: 10px 0px;
+  border-bottom: 1px solid s.$hc;
+}
+
+.md h4 {
+  color: s.$hc;
+  margin: 10px 0px;
+  border-bottom: 0.5px solid s.$hc;
+}
+
+.md h5 {
+  color: s.$t;
+  margin: 10px 0px;
+  border-bottom: 1px solid s.$t;
+}
+
+.md h6 {
+  color: s.$t;
+  margin: 10px 0px;
+  border-bottom: 1px solid s.$t;
 }
 
 .md p, .md li {
@@ -16,4 +47,8 @@
 
 .md svg {
   overflow: visible;
+}
+
+.md code {
+  color: aqua;
 }
