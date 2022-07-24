@@ -12,7 +12,7 @@ export class Notebook {
   }
 
   public readNotebook(fs: any) {
-    this.dir = new DirNode(this.path, this.name, true);
+    this.dir = new DirNode(this.path, this.name, true, this);
 
     const stack = [this.dir];
     while (stack.length > 0) {
@@ -21,7 +21,7 @@ export class Notebook {
         const childern = fs.readdirSync(node.path);
         for (let child of childern) {
           const childPath = `${node.path}/${child}`;
-          const childNode = new DirNode(childPath, child, fs.statSync(childPath).isDirectory());
+          const childNode = new DirNode(childPath, child, fs.statSync(childPath).isDirectory(), this);
           node.children.push(childNode);
 
           if (childNode.isDir) {

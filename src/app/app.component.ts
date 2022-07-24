@@ -27,6 +27,7 @@ export class AppComponent {
   public newFileFolderName: string = "";
 
   public markdownCode: string = "";
+  public imageFolderPath: string = "";
   public openedFile: DirNode;
 
   public config: Config;
@@ -57,6 +58,7 @@ export class AppComponent {
     this.openedFile = dirNode;
     if (!dirNode.isDir) {
       if (dirNode.name.toLowerCase().endsWith('.md')) {
+        this.imageFolderPath = dirNode.notebook.path.replace(/\\/g, '/') + "/images/";
         this.markdownCode = this.electronService.fs.readFileSync(dirNode.path).toString();
       }
     }
@@ -93,7 +95,7 @@ export class AppComponent {
   public createNewFileFolder(): void {
     if (this.newFolderDialogOpen) {
       let path = this.openedFile.path + "/" + this.newFileFolderName;
-      let dir = new DirNode(path, this.newFileFolderName, true);
+      let dir = new DirNode(path, this.newFileFolderName, true, this.openedFile.notebook);
       this.openedFile.children.push(dir);
       this.sidebarComponent.addNode(dir);
       this.electronService.fs.mkdirSync(path);
@@ -103,7 +105,7 @@ export class AppComponent {
         this.newFileFolderName += ".md";
       }
       let path = this.openedFile.path + "/" + this.newFileFolderName;
-      let dir = new DirNode(path, this.newFileFolderName, false);
+      let dir = new DirNode(path, this.newFileFolderName, false, this.openedFile.notebook);
       this.openedFile.children.push(dir);
       this.sidebarComponent.addNode(dir);
       this.electronService.fs.writeFileSync(path, '');
