@@ -3,6 +3,23 @@
 .main-frame-div {
   height: 100%;
   width: 100%;
+  display: grid;
+  grid-template-columns: 300px auto 50px;
+}
+
+.side-buttons-div {
+  height: 100%;
+  background-color: s.$bc;
+  width: 50px;
+}
+
+.pane-div {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.sidebar-div {
+  width: 300px;
 }
 
 .dialog-div {

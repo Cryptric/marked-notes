@@ -1,15 +1,23 @@
 <div class="main-frame-div">
-  <as-split direction="horizontal">
-    <as-split-area [size]="20">
-      <app-sidebar [notebooks]="config.notebooks" (selectedFile)="selectFile($event)" (newNotebook)="newNotebookDialogOpen = true" (delete)="delete()" (newFolder)="openNewFolderDialog()" (newFile)="openNewFileDialog()"></app-sidebar>
-    </as-split-area>
-    <as-split-area [size]="40">
-      <app-editor [(markdownCode)]="markdownCode"></app-editor>
-    </as-split-area>
-    <as-split-area [size]="40">
-      <app-preview [markdownCode]="markdownCode" [imageFolderPath]="imageFolderPath"></app-preview>
-    </as-split-area>
-  </as-split>
+  <div class="sidebar-div">
+    <app-sidebar [notebooks]="config.notebooks" (selectedFile)="selectFile($event)" (newNotebook)="newNotebookDialogOpen = true" (delete)="delete()" (newFolder)="openNewFolderDialog()" (newFile)="openNewFileDialog()"></app-sidebar>
+  </div>
+  <div class="pane-div">
+    <as-split direction="horizontal">
+      <as-split-area *ngIf="showEditor" [size]="50">
+        <app-editor [(markdownCode)]="markdownCode"></app-editor>
+      </as-split-area>
+      <as-split-area *ngIf="showPreview" [size]="50">
+        <app-preview [markdownCode]="markdownCode" [imageFolderPath]="imageFolderPath"></app-preview>
+      </as-split-area>
+    </as-split>
+  </div>
+  <div class="side-buttons-div">
+    <span class="icon edit" *ngIf="showPreview" (click)="togglePreview()"></span>
+    <span class="icon icon-passive edit" *ngIf="!showPreview" (click)="togglePreview()"></span>
+    <span class="icon view" *ngIf="showEditor" (click)="toggleEditor()"></span>
+    <span class="icon icon-passive view" *ngIf="!showEditor" (click)="toggleEditor()"></span>
+  </div>
 </div>
 <div class="overlay" *ngIf="newNotebookDialogOpen || newFolderDialogOpen || newFileDialogOpen"></div>
 <div class="dialog-div" *ngIf="newNotebookDialogOpen || newFolderDialogOpen || newFileDialogOpen">

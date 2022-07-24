@@ -14,6 +14,7 @@ body, html {
 
   height: 100%;
   width: 100%;
+  overflow: hidden;
 
   background-color: $b;
 }
@@ -62,6 +63,10 @@ input[type="text"] {
   background-repeat: no-repeat;
   background-position: center;
   cursor: pointer;
+}
+
+.icon-passive {
+  background-color: $b;
 }
 
 .edit {
@@ -118,6 +123,13 @@ input[type="text"] {
 .delete {
   -webkit-mask:  url("./assets/icons/delete.svg") no-repeat 100% 100%;
   mask:  url("./assets/icons/delete.svg") no-repeat 100% 100%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+}
+
+.view {
+  -webkit-mask:  url("./assets/icons/view.svg") no-repeat 100% 100%;
+  mask:  url("./assets/icons/view.svg") no-repeat 100% 100%;
   -webkit-mask-size: cover;
   mask-size: cover;
 }

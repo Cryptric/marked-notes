@@ -26,6 +26,9 @@ export class AppComponent {
   public newFileDialogOpen: boolean = false;
   public newFileFolderName: string = "";
 
+  public showPreview = true;
+  public showEditor = true;
+
   public markdownCode: string = "";
   public imageFolderPath: string = "";
   public openedFile: DirNode;
@@ -147,6 +150,26 @@ export class AppComponent {
       }
     }
     this.sidebarComponent.removeSelectedNode();
+  }
+
+  public togglePreview(): void {
+    if (this.showPreview) {
+      this.showEditor = true;
+    }
+    this.showPreview = !this.showPreview;
+  }
+
+  public toggleEditor(): void {
+    if (this.showPreview && !this.showEditor) {
+      this.showPreview = false;
+      this.showEditor = true;
+      setTimeout(() => this.showPreview = true, 0);
+    } else {
+      this.showEditor = !this.showEditor;
+      if (!this.showEditor) {
+        this.showPreview = true;
+      }
+    }
   }
 
 }
