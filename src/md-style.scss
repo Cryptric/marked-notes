@@ -56,3 +56,20 @@
 .md img {
   max-width: 100%;
 }
+
+.md table {
+  border-spacing: 0px 10px;
+}
+
+.md th {
+  text-align: left;
+  color: s.$t;
+  border-bottom: 1px solid s.$h;
+  border-collapse: collapse;
+}
+
+.md td {
+  color: s.$t;
+  border-bottom: 1px solid s.$hc;
+  border-collapse: collapse;
+}
