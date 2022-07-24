@@ -1,6 +1,6 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 
-import { MarkdownService, MermaidAPI } from 'ngx-markdown';
+import { KatexOptions, MarkdownService, MermaidAPI } from 'ngx-markdown';
 
 @Component({
   selector: 'app-preview',
@@ -15,6 +15,10 @@ export class PreviewComponent implements OnInit {
   @Input() set imageFolderPath(value: string) {
     this._imageFolderPath = value;
     this.markdownService.options.baseUrl = this._imageFolderPath;
+  }
+
+  public katexOptions: KatexOptions = {
+    throwOnError: false
   }
 
 
