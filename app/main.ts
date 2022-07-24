@@ -1,7 +1,8 @@
-import { app, BrowserWindow, screen, ipcMain, dialog} from 'electron';
+import { app, BrowserWindow, screen, ipcMain, dialog, globalShortcut} from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as url from 'url';
+import { electron } from 'process';
 
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
@@ -48,6 +49,8 @@ function createWindow(): BrowserWindow {
     }));
   }
 
+  win.setMenu(null);
+
   // Emitted when the window is closed.
   win.on('closed', () => {
     // Dereference the window object, usually you would store window
@@ -55,6 +58,8 @@ function createWindow(): BrowserWindow {
     // when you should delete the corresponding element.
     win = null;
   });
+
+  globalShortcut.unregisterAll();
 
   return win;
 }

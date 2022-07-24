@@ -30,6 +30,7 @@ export class AppComponent {
   public showEditor = true;
 
   public markdownCode: string = "";
+  public markdownPath: string = "";
   public imageFolderPath: string = "";
   public openedFile: DirNode;
 
@@ -63,6 +64,7 @@ export class AppComponent {
       if (dirNode.name.toLowerCase().endsWith('.md')) {
         this.imageFolderPath = dirNode.notebook.path.replace(/\\/g, '/') + "/images/";
         this.markdownCode = this.electronService.fs.readFileSync(dirNode.path).toString();
+        this.markdownPath = dirNode.path;
       }
     }
   }
@@ -70,7 +72,7 @@ export class AppComponent {
   @HostListener('document:keydown.control.s')
   public save(): void {
     if (this.openedFile) {
-      this.electronService.fs.writeFileSync(this.openedFile.path, this.markdownCode);
+      this.electronService.fs.writeFileSync(this.markdownPath, this.markdownCode);
     }
   }
 
