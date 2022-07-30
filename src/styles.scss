@@ -134,6 +134,11 @@ input[type="text"] {
   mask-size: cover;
 }
 
+/***** Angular Split styling *****/
+.as-split-gutter {
+  background-color: $bc !important;
+}
+
 /***** Tree styling *****/
 .tree-node {
   color: $h;

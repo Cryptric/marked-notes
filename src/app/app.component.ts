@@ -7,6 +7,7 @@ import { Config } from './model/config';
 import { Notebook } from './model/notebook';
 import { DirNode } from './model/dir-node';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,9 @@ export class AppComponent {
   public newFolderDialogOpen: boolean = false;
   public newFileDialogOpen: boolean = false;
   public newFileFolderName: string = "";
+
+  public renameDialogOpen: boolean = false;
+  public renameName: string = "";
 
   public showPreview = true;
   public showEditor = true;
@@ -172,6 +176,56 @@ export class AppComponent {
         this.showPreview = true;
       }
     }
+  }
+
+  public openRenameDialog(): void {
+    if (this.openedFile) {
+      this.renameDialogOpen = true;
+    }
+  }
+
+  public rename(): void {
+    if (!this.renameName) {
+      return;
+    }
+
+    if (this.openedFile.isDir) {
+      // Folder
+      if (this.openedFile.path == this.openedFile.notebook.path) {
+        // Notebook
+
+        let oldPath = this.openedFile.notebook.path;
+        this.openedFile.notebook.path = oldPath.substring(0, oldPath.length - this.openedFile.notebook.name.length) + this.renameName;
+        this.openedFile.name = this.renameName;
+        this.openedFile.notebook.dir.rebuildPath(oldPath.substring(0, oldPath.length - this.openedFile.notebook.name.length));
+        this.openedFile.notebook.name = this.renameName;
+        this.configLoader.saveConfig(this.config);
+
+        this.electronService.fs.renameSync(oldPath, this.openedFile.notebook.path);
+        this.sidebarComponent.rename(this.renameName);
+      } else {
+        // sub folder
+        let oldPath = this.openedFile.path;
+        let basePath = oldPath.substring(0, oldPath.length - this.openedFile.name.length);
+        this.openedFile.name = this.renameName;
+        this.openedFile.rebuildPath(basePath);
+        this.electronService.fs.renameSync(oldPath, this.openedFile.path);
+        this.sidebarComponent.rename(this.renameName);
+
+      }
+    } else {
+      // File
+      if (!this.renameName.includes('.')) {
+        this.renameName += ".md";
+      }
+      let oldPath = this.openedFile.path
+      this.openedFile.path = this.openedFile.path.substring(0, oldPath.length - this.openedFile.name.length) + this.renameName;
+      this.openedFile.name = this.renameName;
+      this.electronService.fs.renameSync(oldPath, this.openedFile.path);
+      this.sidebarComponent.rename(this.renameName);
+    }
+    this.renameName = "";
+    this.renameDialogOpen = false;
   }
 
 }

@@ -17,6 +17,7 @@ export class SidebarComponent implements OnInit, OnChanges {
   @Output() newFolder = new EventEmitter();
   @Output() newFile = new EventEmitter();
   @Output() delete = new EventEmitter();
+  @Output() renameEvent = new EventEmitter();
 
   @ViewChild(TreeComponent)
   private tree: TreeComponent;
@@ -74,6 +75,11 @@ export class SidebarComponent implements OnInit, OnChanges {
       const index = parent.data.children.indexOf(this.activeTreeNode.data);
       parent.data.children.splice(index, 1);
     }
+    this.tree.treeModel.update();
+  }
+
+  public rename(newName: string): void {
+    this.activeTreeNode.data.name = newName;
     this.tree.treeModel.update();
   }
 

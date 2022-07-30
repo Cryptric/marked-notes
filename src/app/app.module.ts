@@ -13,7 +13,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppComponent } from './app.component';
 
 import { AngularSplitModule } from 'angular-split';
-import { MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
+import { MarkdownModule } from 'ngx-markdown';
 import { TreeModule } from '@circlon/angular-tree-component';
 
 import { PreviewComponent } from './preview/preview.component';
@@ -53,12 +53,3 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new Transl
   bootstrap: [AppComponent]
 })
 export class AppModule {}
-
-export function markedOptionsFactory(): MarkedOptions {
-  const renderer = new MarkedRenderer();
-  console.log("options")
-  return {
-    renderer: renderer,
-    baseUrl: "D:/tmp/test-notes/images/",
-  }
-}

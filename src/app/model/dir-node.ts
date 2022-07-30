@@ -16,4 +16,12 @@ export class DirNode {
     this.children = [];
   }
 
+  public rebuildPath(basePath: string): void {
+    //console.log("rebuild: " + basePath);
+    this.path = basePath + "/" + this.name;
+    for (let child of this.children) {
+      child.rebuildPath(basePath + "/" + this.name);
+    }
+  }
+
 }

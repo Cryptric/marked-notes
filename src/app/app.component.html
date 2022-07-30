@@ -1,6 +1,6 @@
 <div class="main-frame-div">
   <div class="sidebar-div">
-    <app-sidebar [notebooks]="config.notebooks" (selectedFile)="selectFile($event)" (newNotebook)="newNotebookDialogOpen = true" (delete)="delete()" (newFolder)="openNewFolderDialog()" (newFile)="openNewFileDialog()"></app-sidebar>
+    <app-sidebar [notebooks]="config.notebooks" (selectedFile)="selectFile($event)" (newNotebook)="newNotebookDialogOpen = true" (delete)="delete()" (newFolder)="openNewFolderDialog()" (newFile)="openNewFileDialog()" (renameEvent)="openRenameDialog()"></app-sidebar>
   </div>
   <div class="pane-div">
     <as-split direction="horizontal">
@@ -19,8 +19,8 @@
     <span class="icon icon-passive view" *ngIf="!showEditor" (click)="toggleEditor()"></span>
   </div>
 </div>
-<div class="overlay" *ngIf="newNotebookDialogOpen || newFolderDialogOpen || newFileDialogOpen"></div>
-<div class="dialog-div" *ngIf="newNotebookDialogOpen || newFolderDialogOpen || newFileDialogOpen">
+<div class="overlay" *ngIf="newNotebookDialogOpen || newFolderDialogOpen || newFileDialogOpen || renameDialogOpen"></div>
+<div class="dialog-div" *ngIf="newNotebookDialogOpen || newFolderDialogOpen || newFileDialogOpen || renameDialogOpen">
   <div class="dialog-content-div">
     <div id="new-notebook-dialog" *ngIf="newNotebookDialogOpen">
       <h1>Create a new notebook</h1>
@@ -34,13 +34,19 @@
         <span class="icon done" (click)="createNewNotebook()"></span>
       </div>
     </div>
-    <div id="new-file-folder-dialog" *ngIf="newFolderDialogOpen || newFileDialogOpen">
+    <div id="new-file-folder-dialog" *ngIf="newFolderDialogOpen || newFileDialogOpen || renameDialogOpen">
       <h1 *ngIf="newFolderDialogOpen">Create new folder</h1>
       <h1 *ngIf="newFileDialogOpen">Create new file</h1>
-      <input type="text" id="new-file-folder-name-input" placeholder="name" [(ngModel)]="newFileFolderName">
-      <div class="dialog-button-bar">
+      <h1 *ngIf="renameDialogOpen">Rename</h1>
+      <input *ngIf="newFolderDialogOpen || newFileDialogOpen" type="text" id="new-file-folder-name-input" placeholder="name" [(ngModel)]="newFileFolderName">
+      <input *ngIf="renameDialogOpen" type="text" id="new-file-folder-name-input" placeholder="name" [(ngModel)]="renameName">
+      <div *ngIf="newFolderDialogOpen || newFileDialogOpen" class="dialog-button-bar">
         <span class="icon close" (click)="newFolderDialogOpen = newFileDialogOpen = false"></span>
         <span class="icon done" (click)="createNewFileFolder()"></span>
+      </div>
+      <div *ngIf="renameDialogOpen" class="dialog-button-bar">
+        <span class="icon close" (click)="renameDialogOpen = false"></span>
+        <span class="icon done" (click)="rename()"></span>
       </div>
     </div>
   </div>
