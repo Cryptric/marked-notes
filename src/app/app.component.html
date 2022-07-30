@@ -29,6 +29,11 @@
         <input type="text" id="file-location-input" placeholder="Notebook location" [(ngModel)]="newNotebookLocation">
         <span class="icon folder-open" id="browse-icon" (click)="openDirectoryDialog()"></span>
       </div>
+      <label class="checkbox-container">
+        <input type="checkbox" id="json-book" name="json-book" [(ngModel)]="newNotebookJson" class="json-label">
+        <span class="checkmark"></span>
+        <label for="json-book">JSON Format</label>
+      </label>
       <div class="dialog-button-bar">
         <span class="icon close" (click)="newNotebookDialogOpen = false"></span>
         <span class="icon done" (click)="createNewNotebook()"></span>

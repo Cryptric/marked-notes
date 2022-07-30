@@ -51,6 +51,65 @@ input[type="text"] {
   outline: none;
 }
 
+.checkbox-container {
+  display: block;
+  position: relative;
+  padding-left: 30px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  user-select: none;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+
+    &:checked ~ .checkmark:after {
+      display: block;
+    }
+
+  }
+
+  .checkmark:after {
+    left: 6px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid $h;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+}
+
+.checkmark {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  border: 2px solid $h;
+  border-radius: 2px;
+
+  &:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+}
+
+label {
+  font-family: $f;
+  font-size: large;
+  color: $h;
+}
+
 .icon {
   background-color: $h;
   background-image: none;

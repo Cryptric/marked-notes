@@ -7,7 +7,8 @@ import { Config } from './model/config';
 import { Notebook } from './model/notebook';
 import { DirNode } from './model/dir-node';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { throwError } from 'rxjs';
+import { EncryptedNotebook } from './model/encrypted-notebook';
+import { EncryptedDirNode } from './model/encrypted-dir-node';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,7 @@ export class AppComponent {
   public newNotebookDialogOpen: boolean = false;
   public newNotebookName: string = "";
   public newNotebookLocation: string = "";
+  public newNotebookJson: boolean = false;
 
   public newFolderDialogOpen: boolean = false;
   public newFileDialogOpen: boolean = false;
@@ -66,32 +68,44 @@ export class AppComponent {
     this.openedFile = dirNode;
     if (!dirNode.isDir) {
       if (dirNode.name.toLowerCase().endsWith('.md')) {
-        this.imageFolderPath = dirNode.notebook.path.replace(/\\/g, '/') + "/images/";
-        this.markdownCode = this.electronService.fs.readFileSync(dirNode.path).toString();
-        this.markdownPath = dirNode.path;
+        if (dirNode.notebook instanceof EncryptedNotebook) {
+          this.markdownCode = (dirNode as EncryptedDirNode).content;
+        } else {
+          this.imageFolderPath = dirNode.notebook.path.replace(/\\/g, '/') + "/images/";
+          this.markdownCode = this.electronService.fs.readFileSync(dirNode.path).toString();
+          this.markdownPath = dirNode.path;
+        }
       }
     }
   }
 
   @HostListener('document:keydown.control.s')
   public save(): void {
-    if (this.openedFile) {
-      this.electronService.fs.writeFileSync(this.markdownPath, this.markdownCode);
+    if (this.openedFile && this.openedFile.name.toLowerCase().endsWith('.md')) {
+      if (this.openedFile.notebook instanceof EncryptedNotebook) {
+        (this.openedFile as EncryptedDirNode).content = this.markdownCode;
+        this.openedFile.notebook.save(this.electronService.fs);
+      } else {
+        this.electronService.fs.writeFileSync(this.markdownPath, this.markdownCode);
+      }
     }
   }
 
   public createNewNotebook(): void {
-    let notebook = new Notebook();
+    let notebook = this.newNotebookJson? new EncryptedNotebook() : new Notebook();
+
     notebook.name = this.newNotebookName;
     notebook.path = this.newNotebookLocation;
     notebook.createNotebook(this.electronService.fs);
-    this.newNotebookDialogOpen = false;
-    this.newNotebookName = "";
-    this.newNotebookLocation = "";
     notebook.readNotebook(this.electronService.fs);
+
     this.config.notebooks.push(notebook);
     this.config.notebooks = [].concat(this.config.notebooks); // to trigger ngOnChange
     this.configLoader.saveConfig(this.config);
+
+    this.newNotebookDialogOpen = false;
+    this.newNotebookName = "";
+    this.newNotebookLocation = "";
   }
 
   public openDirectoryDialog(): void {
@@ -104,20 +118,34 @@ export class AppComponent {
   public createNewFileFolder(): void {
     if (this.newFolderDialogOpen) {
       let path = this.openedFile.path + "/" + this.newFileFolderName;
-      let dir = new DirNode(path, this.newFileFolderName, true, this.openedFile.notebook);
-      this.openedFile.children.push(dir);
-      this.sidebarComponent.addNode(dir);
-      this.electronService.fs.mkdirSync(path);
+      if (this.openedFile.notebook instanceof EncryptedNotebook) {
+        let node = new EncryptedDirNode(path, this.newFileFolderName, true, this.openedFile.notebook);
+        this.openedFile.children.push(node);
+        this.sidebarComponent.addNode(node);
+        this.openedFile.notebook.save(this.electronService.fs);
+      } else {
+        let dir = new DirNode(path, this.newFileFolderName, true, this.openedFile.notebook);
+        this.openedFile.children.push(dir);
+        this.sidebarComponent.addNode(dir);
+        this.electronService.fs.mkdirSync(path);
+      }
       this.newFolderDialogOpen = false;
     } else if (this.newFileDialogOpen) {
       if (!this.newFileFolderName.includes('.')) {
         this.newFileFolderName += ".md";
       }
       let path = this.openedFile.path + "/" + this.newFileFolderName;
-      let dir = new DirNode(path, this.newFileFolderName, false, this.openedFile.notebook);
-      this.openedFile.children.push(dir);
-      this.sidebarComponent.addNode(dir);
-      this.electronService.fs.writeFileSync(path, '');
+      if (this.openedFile.notebook instanceof EncryptedNotebook) {
+        let node = new EncryptedDirNode(path, this.newFileFolderName, false, this.openedFile.notebook);
+        this.openedFile.children.push(node);
+        this.sidebarComponent.addNode(node);
+        this.openedFile.notebook.save(this.electronService.fs);
+      } else {
+        let dir = new DirNode(path, this.newFileFolderName, false, this.openedFile.notebook);
+        this.openedFile.children.push(dir);
+        this.sidebarComponent.addNode(dir);
+        this.electronService.fs.writeFileSync(path, '');
+      }
       this.newFileDialogOpen = false;
 
     }
@@ -139,20 +167,56 @@ export class AppComponent {
   public delete(): void {
     if (this.openedFile) {
       let path = this.openedFile.path;
-      if (this.electronService.fs.statSync(path).isDirectory()) {
-        this.electronService.fs.rmdirSync(path, { recursive: true });
-        let i = -1;
-        this.config.notebooks.forEach((value, index) => {
-          if (value.path === path) {
-            i = index;
+      if (this.openedFile.isDir) {
+        if (this.openedFile.notebook instanceof EncryptedNotebook && this.openedFile instanceof EncryptedDirNode) {
+          if (this.openedFile.parent) {
+            // sub folder
+            let i = -1;
+            this.openedFile.parent.children.forEach((value, index) => {
+              if (value == this.openedFile) {
+                i = index;
+              }
+            });
+            this.openedFile.parent.children.splice(i, 1);
+            this.openedFile.notebook.save(this.electronService.fs);
+          } else {
+            // notebook
+            let i = -1;
+            this.config.notebooks.forEach((value, index) => {
+              if (value == this.openedFile.notebook) {
+                i = index;
+              }
+            });
+            this.openedFile.notebook.remove(this.electronService.fs);
+            this.config.notebooks.splice(i, 1);
+            this.configLoader.saveConfig(this.config);
           }
-        });
-        if (i != 0) {
-          this.config.notebooks.splice(i, 1);
-          this.configLoader.saveConfig(this.config);
+        } else {
+          this.electronService.fs.rmdirSync(path, { recursive: true });
+          let i = -1;
+          this.config.notebooks.forEach((value, index) => {
+            if (value.path === path) {
+              i = index;
+            }
+          });
+          if (i != 0) {
+            this.config.notebooks.splice(i, 1);
+            this.configLoader.saveConfig(this.config);
+          }
         }
       } else {
-        this.electronService.fs.rmSync(path);
+        if (this.openedFile.notebook instanceof EncryptedNotebook && this.openedFile instanceof EncryptedDirNode) {
+          let i = -1;
+          this.openedFile.parent.children.forEach((value, index) => {
+            if (value == this.openedFile) {
+              i = index;
+            }
+          });
+          this.openedFile.parent.children.splice(i, 1);
+          this.openedFile.notebook.save(this.electronService.fs);
+        } else {
+          this.electronService.fs.rmSync(path);
+        }
       }
     }
     this.sidebarComponent.removeSelectedNode();
@@ -191,17 +255,22 @@ export class AppComponent {
 
     if (this.openedFile.isDir) {
       // Folder
-      if (this.openedFile.path == this.openedFile.notebook.path) {
+      if (this.openedFile.path === this.openedFile.notebook.path || (this.openedFile.notebook instanceof EncryptedNotebook && this.openedFile.path === this.openedFile.notebook.name)) {
         // Notebook
 
         let oldPath = this.openedFile.notebook.path;
+        let oldName = this.openedFile.notebook.name;
         this.openedFile.notebook.path = oldPath.substring(0, oldPath.length - this.openedFile.notebook.name.length) + this.renameName;
         this.openedFile.name = this.renameName;
         this.openedFile.notebook.dir.rebuildPath(oldPath.substring(0, oldPath.length - this.openedFile.notebook.name.length));
         this.openedFile.notebook.name = this.renameName;
         this.configLoader.saveConfig(this.config);
 
-        this.electronService.fs.renameSync(oldPath, this.openedFile.notebook.path);
+        if (this.openedFile.notebook instanceof EncryptedNotebook) {
+          this.openedFile.notebook.rename(this.electronService.fs, oldPath, oldName);
+        } else {
+          this.electronService.fs.renameSync(oldPath, this.openedFile.notebook.path);
+        }
         this.sidebarComponent.rename(this.renameName);
       } else {
         // sub folder
@@ -209,7 +278,11 @@ export class AppComponent {
         let basePath = oldPath.substring(0, oldPath.length - this.openedFile.name.length);
         this.openedFile.name = this.renameName;
         this.openedFile.rebuildPath(basePath);
-        this.electronService.fs.renameSync(oldPath, this.openedFile.path);
+        if (this.openedFile.notebook instanceof EncryptedNotebook) {
+          this.openedFile.notebook.save(this.electronService.fs);
+        } else {
+          this.electronService.fs.renameSync(oldPath, this.openedFile.path);
+        }
         this.sidebarComponent.rename(this.renameName);
 
       }
@@ -221,7 +294,11 @@ export class AppComponent {
       let oldPath = this.openedFile.path
       this.openedFile.path = this.openedFile.path.substring(0, oldPath.length - this.openedFile.name.length) + this.renameName;
       this.openedFile.name = this.renameName;
-      this.electronService.fs.renameSync(oldPath, this.openedFile.path);
+      if (this.openedFile.notebook instanceof EncryptedNotebook) {
+        this.openedFile.notebook.save(this.electronService.fs);
+      } else {
+        this.electronService.fs.renameSync(oldPath, this.openedFile.path);
+      }
       this.sidebarComponent.rename(this.renameName);
     }
     this.renameName = "";

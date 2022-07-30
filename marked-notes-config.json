@@ -1,1 +1,1 @@
-{"notebooks":[{"name":"test-notes","path":"D:\\tmp\\test-notes"},{"name":"book-3","path":"D:\\tmp/book-3"},{"name":"DDCA","path":"D:\\tmp/DDCA"}]}
+{"notebooks":[{"isEncryptedNotebook":false,"name":"test-notes","path":"D:\\tmp\\test-notes"},{"isEncryptedNotebook":false,"name":"book-1","path":"D:\\tmp/book-1"},{"isEncryptedNotebook":false,"name":"DDCA","path":"D:\\tmp/DDCA"},{"isEncryptedNotebook":true,"name":"aaa","path":"D:\\tmp/aaa"},{"isEncryptedNotebook":false,"name":"works","path":"D:\\tmp/works"}]}

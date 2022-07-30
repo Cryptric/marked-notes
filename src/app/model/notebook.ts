@@ -6,6 +6,7 @@ export class Notebook {
   public path: string;
 
   public dir: DirNode;
+  public isEncryptedNotebook: boolean = false;
 
   constructor() {
 
