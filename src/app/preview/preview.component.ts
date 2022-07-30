@@ -2,6 +2,11 @@ import { Component, HostListener, Input, OnInit } from '@angular/core';
 
 import { KatexOptions, MarkdownService, MermaidAPI } from 'ngx-markdown';
 
+import { Renderer } from 'marked';
+import { Notebook } from '../model/notebook';
+import { EncryptedDirNode } from '../model/encrypted-dir-node';
+import { EncryptedNotebook } from '../model/encrypted-notebook';
+
 @Component({
   selector: 'app-preview',
   templateUrl: './preview.component.html',
@@ -9,9 +14,13 @@ import { KatexOptions, MarkdownService, MermaidAPI } from 'ngx-markdown';
 })
 export class PreviewComponent implements OnInit {
 
+  @Input() notebook: Notebook;
+
   private _markdownCode: string;
   public _markdownCodeRender: string;
   _imageFolderPath: string = "";
+
+  private renderer: Renderer = new Renderer();
 
   @Input() set imageFolderPath(value: string) {
     this._imageFolderPath = value;
@@ -66,7 +75,25 @@ export class PreviewComponent implements OnInit {
     theme: MermaidAPI.Theme.Dark
   }
 
-  constructor(private markdownService: MarkdownService) { }
+  constructor(private markdownService: MarkdownService) {
+    this.renderer.options = this.markdownService.options;
+    this.markdownService.renderer.image = (href: string, title: string, text: string) => {
+      if (this.notebook) {
+        if (this.notebook instanceof EncryptedNotebook) {
+          let path = this.notebook.path + "/images/" + href;
+          let data = this.notebook.loadFile(path);
+          let out = `<img src="${data}" alt="${text}"`;
+          if (title) {
+            out += ` title="${title}"`;
+          }
+          out += this.renderer.options.xhtml ? '/>' : '>';
+          return out;
+        } else {
+          return this.renderer.image(href, title, text);
+        }
+      }
+    }
+  }
 
   ngOnInit(): void {
   }

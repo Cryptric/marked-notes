@@ -56,4 +56,21 @@ export class EncryptedNotebook extends Notebook {
     this.save(fs);
   }
 
+  public loadFile(path: string): string {
+    return this.searchFile(path, this.dir);
+  }
+
+  private searchFile(path: string, node: EncryptedDirNode): string {
+    if (node.path === path) {
+      return node.content;
+    }
+    for (let child of node.children) {
+      let result = this.searchFile(path, child);
+      if (result) {
+        return result;
+      }
+    }
+    return null;
+  }
+
 }

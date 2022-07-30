@@ -8,7 +8,7 @@
         <app-editor [(markdownCode)]="markdownCode" (save)="save()"></app-editor>
       </as-split-area>
       <as-split-area *ngIf="showPreview" [size]="50">
-        <app-preview [markdownCode]="markdownCode" [imageFolderPath]="imageFolderPath"></app-preview>
+        <app-preview [markdownCode]="markdownCode" [imageFolderPath]="imageFolderPath" [notebook]="openedFile?.notebook"></app-preview>
       </as-split-area>
     </as-split>
   </div>
