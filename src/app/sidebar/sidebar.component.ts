@@ -83,4 +83,14 @@ export class SidebarComponent implements OnInit, OnChanges {
     this.tree.treeModel.update();
   }
 
+  public addImageToTree(dirNode: DirNode) {
+    let node = this.tree.treeModel.getActiveNode();
+    while (node.parent.parent) {
+      node = node.parent;
+    }
+    let imgNode = node.data.children.filter((element) => element.name === "images")[0];
+    imgNode.children.push({name: dirNode.name, children: [], dirNode: dirNode});
+    this.tree.treeModel.update();
+  }
+
 }

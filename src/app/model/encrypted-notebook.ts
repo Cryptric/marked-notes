@@ -73,4 +73,31 @@ export class EncryptedNotebook extends Notebook {
     return null;
   }
 
+  public override pasteImage(file: File, fs: any): EncryptedDirNode {
+    let imgDir = this.dir.children.filter((element) => element.name === "images")[0];
+    let files = [];
+    imgDir.children.forEach((element) => {
+      if (element.name.match(Notebook.IMAGE_NAME_REGEX)) {
+        files.push(parseInt(element.name.substring(4, element.name.indexOf('.'))));
+      }
+    });
+    let name;
+    if (files.length == 0) {
+      name = "img-0";
+    } else {
+      let max = Math.max.apply(Math, files);
+      name = "img-" + (max + 1);
+    }
+    let imageType = file.name.substring(file.name.lastIndexOf('.'), file.name.length);
+    name = name + imageType;
+
+    let img = 'data:image/' + imageType.substring(1) + ";base64," + fs.readFileSync(file.path, 'base64');
+
+    let imgNode = new EncryptedDirNode(this.path + "/images/" + name, name, false, this);
+    imgNode.parent = imgDir;
+    imgNode.content = img;
+    imgDir.children.push(imgNode);
+    return imgNode;
+  }
+
 }

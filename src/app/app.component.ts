@@ -44,7 +44,7 @@ export class AppComponent {
 
   private configLoader: ConfigLoader;
 
-  constructor(private electronService: ElectronService, private translate: TranslateService) {
+  constructor(public electronService: ElectronService, private translate: TranslateService) {
     this.translate.setDefaultLang('en');
     // console.log('APP_CONFIG', APP_CONFIG);
 
@@ -303,6 +303,10 @@ export class AppComponent {
     }
     this.renameName = "";
     this.renameDialogOpen = false;
+  }
+
+  public addTreeImage(event) {
+    this.sidebarComponent.addImageToTree(event);
   }
 
 }

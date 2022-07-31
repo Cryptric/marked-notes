@@ -27,6 +27,7 @@ export class ConfigLoader {
       }
     } else {
       config = new Config();
+      config.notebooks = [];
     }
     return config;
   }

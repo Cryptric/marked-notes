@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { DirNode } from '../model/dir-node';
+import { Notebook } from '../model/notebook';
 
 @Component({
   selector: 'app-editor',
@@ -13,6 +15,11 @@ export class EditorComponent implements OnInit {
 
   @Output() markdownCodeChange = new EventEmitter<string>();
   @Output() save = new EventEmitter();
+
+  @Output() addTreeImage = new EventEmitter<DirNode>(true);
+
+  @Input() fs: any;
+  @Input() notebook: Notebook;
 
   private saveScheduled = false;
 
@@ -31,6 +38,16 @@ export class EditorComponent implements OnInit {
     this.saveScheduled = false;
     this.save.emit();
   }
+
+  public paste(event): void {
+    if (event.clipboardData.files[0] && this.notebook) {
+      event.preventDefault();
+      let imgNode = this.notebook.pasteImage(event.clipboardData.files[0], this.fs);
+      document.execCommand('insertHTML', false, '![](' + imgNode.name + ')');
+      this.addTreeImage.emit(imgNode);
+    }
+  }
+
 
 
 }
