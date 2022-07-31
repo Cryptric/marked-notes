@@ -38,6 +38,7 @@
               "src/fonts.scss",
               "src/md-style.scss",
               "node_modules/prismjs/themes/prism-okaidia.css",
+              "node_modules/prism-themes/themes/prism-shades-of-purple.css",
               "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",
               "node_modules/katex/dist/katex.min.css"
             ],
