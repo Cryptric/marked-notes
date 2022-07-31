@@ -38,6 +38,7 @@
 
 .md p, .md li {
   color: s.$t;
+  font-family: s.$f;
 }
 
 .md .mermaid {
@@ -50,7 +51,7 @@
 }
 
 .md code {
-  color: aqua;
+  color: s.$h2;
 }
 
 .md img {

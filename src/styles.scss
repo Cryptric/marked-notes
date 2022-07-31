@@ -1,8 +1,12 @@
-$b: #1B1F3A;
-$bc: #53354A;
+$h: #8E05C2;
+$hc: #500B67;
+$hcc: #3E065F;
 
-$h: #FF7844;
-$hc: #A64942;
+$h2: #00FFFF;
+
+$b: #0A0A0A;
+$bc: #161616;
+$bcc: #262626;
 
 $t: #b5b5b5;
 
@@ -195,7 +199,7 @@ label {
 
 /***** Angular Split styling *****/
 .as-split-gutter {
-  background-color: $bc !important;
+  background-color: $bcc !important;
 }
 
 /***** Tree styling *****/
@@ -211,7 +215,7 @@ label {
 }
 
 .tree-node-active {
-  color: $hc;
+  color: $h2;
 }
 
 .tree-children.tree-children-no-padding { padding-left: 0 }
