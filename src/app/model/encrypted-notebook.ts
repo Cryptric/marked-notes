@@ -1,3 +1,4 @@
+import { DirNode } from "./dir-node";
 import { EncryptedDirNode } from "./encrypted-dir-node";
 import { Notebook } from "./notebook";
 
@@ -75,25 +76,46 @@ export class EncryptedNotebook extends Notebook {
 
   public override pasteImage(file: File, fs: any): EncryptedDirNode {
     let imgDir = this.dir.children.filter((element) => element.name === "images")[0];
-    let files = [];
-    imgDir.children.forEach((element) => {
-      if (element.name.match(Notebook.IMAGE_NAME_REGEX)) {
-        files.push(parseInt(element.name.substring(4, element.name.indexOf('.'))));
-      }
-    });
-    let name;
-    if (files.length == 0) {
-      name = "img-0";
-    } else {
-      let max = Math.max.apply(Math, files);
-      name = "img-" + (max + 1);
-    }
+    let name = this.getNewImageName(fs, Notebook.IMAGE_NAME_REGEX, "img");
     let imageType = file.name.substring(file.name.lastIndexOf('.'), file.name.length);
     name = name + imageType;
 
     let img = 'data:image/' + imageType.substring(1) + ";base64," + fs.readFileSync(file.path, 'base64');
 
     let imgNode = new EncryptedDirNode(this.path + "/images/" + name, name, false, this);
+    imgNode.parent = imgDir;
+    imgNode.content = img;
+    imgDir.children.push(imgNode);
+    return imgNode;
+  }
+
+  public override getNewImageName(fs: any, regex: any, baseName: string): string {
+    let imgDir = this.dir.children.filter((element) => element.name === "images")[0];
+    let files = [];
+    imgDir.children.forEach((element) => {
+      if (element.name.match(regex)) {
+        files.push(parseInt(element.name.substring(baseName.length + 1, element.name.indexOf('.'))));
+      }
+    });
+    let name;
+    if (files.length == 0) {
+      name = baseName + "-0";
+    } else {
+      let max = Math.max.apply(Math, files);
+      name = baseName + "-" + (max + 1);
+    }
+    return name;
+  }
+
+  public saveSketch(data, fs: any): DirNode {
+    let imgDir = this.dir.children.filter((element) => element.name === "images")[0];
+
+    let fileName = this.getNewImageName(fs, Notebook.SKETCH_NAME_REGEX, "sketch");
+    fileName = fileName + ".svg";
+
+    let img = 'data:image/svg+xml;utf8,' + data;
+
+    let imgNode = new EncryptedDirNode(this.path + "/images/" + fileName, fileName, false, this);
     imgNode.parent = imgDir;
     imgNode.content = img;
     imgDir.children.push(imgNode);

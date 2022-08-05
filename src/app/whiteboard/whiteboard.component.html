@@ -1,0 +1,13 @@
+<div class="main-div">
+  <div class="button-bar">
+    <div class="nav">
+      <span class="icon close" (click)="close.emit()"></span>
+      <span class="icon done" (click)="done()"></span>
+    </div>
+  </div>
+  <div #drawArea class="draw-area" (pointermove)="drag($event)" (pointerdown)="onMouseDown($event)" (pointerup)="onMouseUp($event)">
+    <svg class="svg-canvas">
+      <path *ngFor="let path of pathData" [attr.d]="path" class="line"/>
+    </svg>
+  </div>
+</div>

@@ -197,6 +197,20 @@ label {
   mask-size: cover;
 }
 
+.brush {
+  -webkit-mask:  url("./assets/icons/brush.svg") no-repeat 100% 100%;
+  mask:  url("./assets/icons/brush.svg") no-repeat 100% 100%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+}
+
+.draw {
+  -webkit-mask:  url("./assets/icons/draw.svg") no-repeat 100% 100%;
+  mask:  url("./assets/icons/draw.svg") no-repeat 100% 100%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+}
+
 /***** Angular Split styling *****/
 .as-split-gutter {
   background-color: $bcc !important;

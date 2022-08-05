@@ -83,7 +83,7 @@ export class PreviewComponent implements OnInit {
         if (this.notebook instanceof EncryptedNotebook && !href.startsWith('http')) {
           let path = this.notebook.path + "/images/" + href;
           let data = this.notebook.loadFile(path);
-          let out = `<img src="${data}" alt="${text}"`;
+          let out = `<img src='${data}' alt="${text}"`;
           if (title) {
             out += ` title="${title}"`;
           }

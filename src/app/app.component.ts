@@ -9,6 +9,7 @@ import { DirNode } from './model/dir-node';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { EncryptedNotebook } from './model/encrypted-notebook';
 import { EncryptedDirNode } from './model/encrypted-dir-node';
+import { EditorComponent } from './editor/editor.component';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,9 @@ export class AppComponent {
 
   @ViewChild(SidebarComponent)
   private sidebarComponent: SidebarComponent;
+
+  @ViewChild(EditorComponent)
+  private editorComponent: EditorComponent;
 
   public newNotebookDialogOpen: boolean = false;
   public newNotebookName: string = "";
@@ -31,6 +35,8 @@ export class AppComponent {
 
   public renameDialogOpen: boolean = false;
   public renameName: string = "";
+
+  public whiteboardOpen: boolean = false;
 
   public showPreview = true;
   public showEditor = true;
@@ -307,6 +313,16 @@ export class AppComponent {
 
   public addTreeImage(event) {
     this.sidebarComponent.addImageToTree(event);
+  }
+
+  public insertSketch(data) {
+    if (this.openedFile) {
+      let node = this.openedFile.notebook.saveSketch(data, this.electronService.fs);
+      this.addTreeImage(node);
+      let md = "![sketch](" + node.name + ")";
+      this.editorComponent.insert(md);
+    }
+    this.whiteboardOpen = false;
   }
 
 }

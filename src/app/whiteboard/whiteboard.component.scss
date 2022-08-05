@@ -1,0 +1,33 @@
+@use '../../styles.scss' as s;
+
+.main-div {
+  width: 100%;
+  height: 100%;
+  background-color: s.$b;
+}
+
+.button-bar {
+  background-color: s.$bc;
+  display: flex;
+  width: 100%;
+}
+
+.nav {
+  justify-self: end;
+  margin-left: auto;
+}
+
+.line {
+  fill: s.$t;
+}
+
+.draw-area {
+  width: 100%;
+  height: calc(100% - 44px);
+  touch-action: none;
+}
+
+.svg-canvas {
+  width: 100%;
+  height: 100%;
+}

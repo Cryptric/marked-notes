@@ -11,6 +11,8 @@ export class EditorComponent implements OnInit {
 
   private static SAVE_DELAY = 1000;
 
+  @ViewChild('textArea') textArea: ElementRef;
+
   @Input() markdownCode: string;
 
   @Output() markdownCodeChange = new EventEmitter<string>();
@@ -46,6 +48,12 @@ export class EditorComponent implements OnInit {
       document.execCommand('insertHTML', false, '![](' + imgNode.name + ')');
       this.addTreeImage.emit(imgNode);
     }
+  }
+
+  public insert(value: string) {
+    let cursorPos = this.textArea.nativeElement.selectionStart;
+    this.markdownCode = this.markdownCode.substring(0, cursorPos) + value + this.markdownCode.substring(cursorPos);
+    this.onChange();
   }
 
 

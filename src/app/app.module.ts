@@ -19,6 +19,7 @@ import { TreeModule } from '@circlon/angular-tree-component';
 import { PreviewComponent } from './preview/preview.component';
 import { EditorComponent } from './editor/editor.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { WhiteboardComponent } from './whiteboard/whiteboard.component';
 
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -28,7 +29,8 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new Transl
     AppComponent,
     PreviewComponent,
     EditorComponent,
-    SidebarComponent
+    SidebarComponent,
+    WhiteboardComponent
   ],
   imports: [
     BrowserModule,
