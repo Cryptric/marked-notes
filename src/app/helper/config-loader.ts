@@ -1,7 +1,7 @@
 import { fstat } from "fs";
 import { ElectronService } from "../core/services";
 import { Config } from "../model/config";
-import { EncryptedNotebook } from "../model/encrypted-notebook";
+import { JSONNotebook } from "../model/json-notebook";
 import { Notebook } from "../model/notebook";
 
 export class ConfigLoader {
@@ -20,7 +20,7 @@ export class ConfigLoader {
       config = Object.assign(new Config(), JSON.parse(this.fs.readFileSync(ConfigLoader.CONFIG_PATH)));
       for (let i = 0; i < config.notebooks.length; i++) {
         if (config.notebooks[i].isEncryptedNotebook) {
-          config.notebooks[i] = Object.assign(new EncryptedNotebook(), config.notebooks[i]);
+          config.notebooks[i] = Object.assign(new JSONNotebook(), config.notebooks[i]);
         } else {
           config.notebooks[i] = Object.assign(new Notebook(), config.notebooks[i]);
         }

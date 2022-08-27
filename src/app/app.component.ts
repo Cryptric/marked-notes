@@ -7,8 +7,8 @@ import { Config } from './model/config';
 import { Notebook } from './model/notebook';
 import { DirNode } from './model/dir-node';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { EncryptedNotebook } from './model/encrypted-notebook';
-import { EncryptedDirNode } from './model/encrypted-dir-node';
+import { JSONNotebook } from './model/json-notebook';
+import { JSONDirNode } from './model/json-dir-node';
 import { EditorComponent } from './editor/editor.component';
 import { ConfigService } from './helper/config.service';
 import { ThisReceiver } from '@angular/compiler';
@@ -74,8 +74,8 @@ export class AppComponent {
     this.openedFile = dirNode;
     if (!dirNode.isDir) {
       if (dirNode.name.toLowerCase().endsWith('.md')) {
-        if (dirNode.notebook instanceof EncryptedNotebook) {
-          this.markdownCode = (dirNode as EncryptedDirNode).content;
+        if (dirNode.notebook instanceof JSONNotebook) {
+          this.markdownCode = (dirNode as JSONDirNode).content;
         } else {
           this.imageFolderPath = dirNode.notebook.path.replace(/\\/g, '/') + "/images/";
           this.markdownCode = this.electronService.fs.readFileSync(dirNode.path).toString();
@@ -88,8 +88,8 @@ export class AppComponent {
   @HostListener('document:keydown.control.s')
   public save(): void {
     if (this.openedFile && this.openedFile.name.toLowerCase().endsWith('.md')) {
-      if (this.openedFile.notebook instanceof EncryptedNotebook) {
-        (this.openedFile as EncryptedDirNode).content = this.markdownCode;
+      if (this.openedFile.notebook instanceof JSONNotebook) {
+        (this.openedFile as JSONDirNode).content = this.markdownCode;
         this.openedFile.notebook.save(this.electronService.fs);
       } else {
         this.electronService.fs.writeFileSync(this.markdownPath, this.markdownCode);
@@ -98,7 +98,7 @@ export class AppComponent {
   }
 
   public createNewNotebook(): void {
-    let notebook = this.newNotebookJson? new EncryptedNotebook() : new Notebook();
+    let notebook = this.newNotebookJson? new JSONNotebook() : new Notebook();
 
     notebook.name = this.newNotebookName;
     notebook.path = this.newNotebookLocation;
@@ -124,8 +124,8 @@ export class AppComponent {
   public createNewFileFolder(): void {
     if (this.newFolderDialogOpen) {
       let path = this.openedFile.path + "/" + this.newFileFolderName;
-      if (this.openedFile.notebook instanceof EncryptedNotebook) {
-        let node = new EncryptedDirNode(path, this.newFileFolderName, true, this.openedFile.notebook);
+      if (this.openedFile.notebook instanceof JSONNotebook) {
+        let node = new JSONDirNode(path, this.newFileFolderName, true, this.openedFile.notebook);
         this.openedFile.children.push(node);
         this.sidebarComponent.addNode(node);
         this.openedFile.notebook.save(this.electronService.fs);
@@ -141,8 +141,8 @@ export class AppComponent {
         this.newFileFolderName += ".md";
       }
       let path = this.openedFile.path + "/" + this.newFileFolderName;
-      if (this.openedFile.notebook instanceof EncryptedNotebook) {
-        let node = new EncryptedDirNode(path, this.newFileFolderName, false, this.openedFile.notebook);
+      if (this.openedFile.notebook instanceof JSONNotebook) {
+        let node = new JSONDirNode(path, this.newFileFolderName, false, this.openedFile.notebook);
         this.openedFile.children.push(node);
         this.sidebarComponent.addNode(node);
         this.openedFile.notebook.save(this.electronService.fs);
@@ -174,7 +174,7 @@ export class AppComponent {
     if (this.openedFile) {
       let path = this.openedFile.path;
       if (this.openedFile.isDir) {
-        if (this.openedFile.notebook instanceof EncryptedNotebook && this.openedFile instanceof EncryptedDirNode) {
+        if (this.openedFile.notebook instanceof JSONNotebook && this.openedFile instanceof JSONDirNode) {
           if (this.openedFile.parent) {
             // sub folder
             let i = -1;
@@ -211,7 +211,7 @@ export class AppComponent {
           }
         }
       } else {
-        if (this.openedFile.notebook instanceof EncryptedNotebook && this.openedFile instanceof EncryptedDirNode) {
+        if (this.openedFile.notebook instanceof JSONNotebook && this.openedFile instanceof JSONDirNode) {
           let i = -1;
           this.openedFile.parent.children.forEach((value, index) => {
             if (value == this.openedFile) {
@@ -261,7 +261,7 @@ export class AppComponent {
 
     if (this.openedFile.isDir) {
       // Folder
-      if (this.openedFile.path === this.openedFile.notebook.path || (this.openedFile.notebook instanceof EncryptedNotebook && this.openedFile.path === this.openedFile.notebook.name)) {
+      if (this.openedFile.path === this.openedFile.notebook.path || (this.openedFile.notebook instanceof JSONNotebook && this.openedFile.path === this.openedFile.notebook.name)) {
         // Notebook
 
         let oldPath = this.openedFile.notebook.path;
@@ -272,7 +272,7 @@ export class AppComponent {
         this.openedFile.notebook.name = this.renameName;
         this.configService.saveConfig();
 
-        if (this.openedFile.notebook instanceof EncryptedNotebook) {
+        if (this.openedFile.notebook instanceof JSONNotebook) {
           this.openedFile.notebook.rename(this.electronService.fs, oldPath, oldName);
         } else {
           this.electronService.fs.renameSync(oldPath, this.openedFile.notebook.path);
@@ -284,7 +284,7 @@ export class AppComponent {
         let basePath = oldPath.substring(0, oldPath.length - this.openedFile.name.length);
         this.openedFile.name = this.renameName;
         this.openedFile.rebuildPath(basePath);
-        if (this.openedFile.notebook instanceof EncryptedNotebook) {
+        if (this.openedFile.notebook instanceof JSONNotebook) {
           this.openedFile.notebook.save(this.electronService.fs);
         } else {
           this.electronService.fs.renameSync(oldPath, this.openedFile.path);
@@ -300,7 +300,7 @@ export class AppComponent {
       let oldPath = this.openedFile.path
       this.openedFile.path = this.openedFile.path.substring(0, oldPath.length - this.openedFile.name.length) + this.renameName;
       this.openedFile.name = this.renameName;
-      if (this.openedFile.notebook instanceof EncryptedNotebook) {
+      if (this.openedFile.notebook instanceof JSONNotebook) {
         this.openedFile.notebook.save(this.electronService.fs);
       } else {
         this.electronService.fs.renameSync(oldPath, this.openedFile.path);

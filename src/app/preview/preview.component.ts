@@ -5,8 +5,8 @@ import { KatexOptions, MarkdownService, MermaidAPI } from 'ngx-markdown';
 
 import { Renderer } from 'marked';
 import { Notebook } from '../model/notebook';
-import { EncryptedDirNode } from '../model/encrypted-dir-node';
-import { EncryptedNotebook } from '../model/encrypted-notebook';
+import { JSONDirNode } from '../model/json-dir-node';
+import { JSONNotebook } from '../model/json-notebook';
 
 @Component({
   selector: 'app-preview',
@@ -80,7 +80,7 @@ export class PreviewComponent implements OnInit {
     this.renderer.options = this.markdownService.options;
     this.markdownService.renderer.image = (href: string, title: string, text: string) => {
       if (this.notebook) {
-        if (this.notebook instanceof EncryptedNotebook && !href.startsWith('http')) {
+        if (this.notebook instanceof JSONNotebook && !href.startsWith('http')) {
           let path = this.notebook.path + "/images/" + href;
           let data = this.notebook.loadFile(path);
           let out = `<img src="${data}" alt="${text}"`;

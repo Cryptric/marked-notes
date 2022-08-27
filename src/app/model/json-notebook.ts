@@ -1,24 +1,24 @@
 import * as svgToTinyDataUri from "mini-svg-data-uri";
 import { DirNode } from "./dir-node";
-import { EncryptedDirNode } from "./encrypted-dir-node";
+import { JSONDirNode } from "./json-dir-node";
 import { Notebook } from "./notebook";
 
-export class EncryptedNotebook extends Notebook {
+export class JSONNotebook extends Notebook {
 
-  public override dir: EncryptedDirNode;
+  public override dir: JSONDirNode;
   public override isEncryptedNotebook: boolean = true;
 
   public override readNotebook(fs: any) {
     let jsonBook = fs.readFileSync(this.path + "/" + this.name + ".json");
-    this.dir = Object.assign(new EncryptedDirNode(), JSON.parse(jsonBook));
+    this.dir = Object.assign(new JSONDirNode(), JSON.parse(jsonBook));
 
     this.dir.notebook = this;
     this.assignNodes(this.dir, null);
   }
 
-  private assignNodes(node: EncryptedDirNode, parent: EncryptedDirNode) {
+  private assignNodes(node: JSONDirNode, parent: JSONDirNode) {
     for (let i = 0; i < node.children.length; i++) {
-      node.children[i] = Object.assign(new EncryptedDirNode(), node.children[i]);
+      node.children[i] = Object.assign(new JSONDirNode(), node.children[i]);
       node.children[i].notebook = this;
       node.children[i].parent = node;
       this.assignNodes(node.children[i], node.children[i]);
@@ -53,8 +53,8 @@ export class EncryptedNotebook extends Notebook {
     if (!fs.existsSync(this.path)) {
       fs.mkdirSync(this.path);
     }
-    let content = new EncryptedDirNode(this.path, this.name, true, this);
-    content.children.push(new EncryptedDirNode(this.path + "/images", "images", true, this));
+    let content = new JSONDirNode(this.path, this.name, true, this);
+    content.children.push(new JSONDirNode(this.path + "/images", "images", true, this));
     this.dir = content;
     this.save(fs);
   }
@@ -63,7 +63,7 @@ export class EncryptedNotebook extends Notebook {
     return this.searchFile(path, this.dir);
   }
 
-  private searchFile(path: string, node: EncryptedDirNode): string {
+  private searchFile(path: string, node: JSONDirNode): string {
     if (node.path === path) {
       return node.content;
     }
@@ -76,7 +76,7 @@ export class EncryptedNotebook extends Notebook {
     return null;
   }
 
-  public override pasteImage(file: File, fs: any): EncryptedDirNode {
+  public override pasteImage(file: File, fs: any): JSONDirNode {
     let imgDir = this.dir.children.filter((element) => element.name === "images")[0];
     let name = this.getNewImageName(fs, Notebook.IMAGE_NAME_REGEX, "img");
     let imageType = file.name.substring(file.name.lastIndexOf('.'), file.name.length);
@@ -84,7 +84,7 @@ export class EncryptedNotebook extends Notebook {
 
     let img = 'data:image/' + imageType.substring(1) + ";base64," + fs.readFileSync(file.path, 'base64');
 
-    let imgNode = new EncryptedDirNode(this.path + "/images/" + name, name, false, this);
+    let imgNode = new JSONDirNode(this.path + "/images/" + name, name, false, this);
     imgNode.parent = imgDir;
     imgNode.content = img;
     imgDir.children.push(imgNode);
@@ -117,7 +117,7 @@ export class EncryptedNotebook extends Notebook {
 
     let img = svgToTinyDataUri(data);
 
-    let imgNode = new EncryptedDirNode(this.path + "/images/" + fileName, fileName, false, this);
+    let imgNode = new JSONDirNode(this.path + "/images/" + fileName, fileName, false, this);
     imgNode.parent = imgDir;
     imgNode.content = img;
     imgDir.children.push(imgNode);
@@ -132,7 +132,7 @@ export class EncryptedNotebook extends Notebook {
 
     let img = svgToTinyDataUri(data);
 
-    let imgNode = new EncryptedDirNode(this.path + "/images/" + fileName, fileName, false, this);
+    let imgNode = new JSONDirNode(this.path + "/images/" + fileName, fileName, false, this);
     imgNode.parent = imgDir;
     imgNode.content = img;
     imgDir.children.push(imgNode);
