@@ -1,6 +1,6 @@
 <div class="main-frame-div">
   <div class="sidebar-div">
-    <app-sidebar [notebooks]="config.notebooks" (selectedFile)="selectFile($event)" (newNotebook)="newNotebookDialogOpen = true" (delete)="delete()" (newFolder)="openNewFolderDialog()" (newFile)="openNewFileDialog()" (renameEvent)="openRenameDialog()"></app-sidebar>
+    <app-sidebar [notebooks]="configService.config.notebooks" (selectedFile)="selectFile($event)" (newNotebook)="newNotebookDialogOpen = true" (delete)="delete()" (newFolder)="openNewFolderDialog()" (newFile)="openNewFileDialog()" (renameEvent)="openRenameDialog()"></app-sidebar>
   </div>
   <div class="pane-div">
     <as-split direction="horizontal">
@@ -18,9 +18,10 @@
     <span class="icon view" *ngIf="showEditor" (click)="toggleEditor()"></span>
     <span class="icon icon-passive view" *ngIf="!showEditor" (click)="toggleEditor()"></span>
     <span class="icon draw" (click)="whiteboardOpen = true"></span>
+    <span class="icon sigma" (click)="texeditorOpen = true"></span>
   </div>
 </div>
-<div class="overlay" *ngIf="newNotebookDialogOpen || newFolderDialogOpen || newFileDialogOpen || renameDialogOpen || whiteboardOpen"></div>
+<div class="overlay" *ngIf="newNotebookDialogOpen || newFolderDialogOpen || newFileDialogOpen || renameDialogOpen || whiteboardOpen || texeditorOpen"></div>
 <div class="dialog-div" *ngIf="newNotebookDialogOpen || newFolderDialogOpen || newFileDialogOpen || renameDialogOpen">
   <div class="dialog-content-div">
     <div id="new-notebook-dialog" *ngIf="newNotebookDialogOpen">
@@ -59,4 +60,7 @@
 </div>
 <div *ngIf="whiteboardOpen" class="whiteboard-div">
   <app-whiteboard class="whiteboard" (close)="whiteboardOpen = false" (sketchDone)="insertSketch($event)"></app-whiteboard>
+</div>
+<div *ngIf="texeditorOpen" class="texeditor-div">
+  <app-tex-editor class="tex-editor" (close)="texeditorOpen = false" (texDone)="insertTex($event)"></app-tex-editor>
 </div>

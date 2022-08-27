@@ -20,6 +20,8 @@ import { PreviewComponent } from './preview/preview.component';
 import { EditorComponent } from './editor/editor.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { WhiteboardComponent } from './whiteboard/whiteboard.component';
+import { TexEditorComponent } from './tex-editor/tex-editor.component';
+import { SafePipe } from './helper/safe.pipe';
 
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -30,7 +32,9 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new Transl
     PreviewComponent,
     EditorComponent,
     SidebarComponent,
-    WhiteboardComponent
+    WhiteboardComponent,
+    TexEditorComponent,
+    SafePipe
   ],
   imports: [
     BrowserModule,

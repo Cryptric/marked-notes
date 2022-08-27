@@ -114,6 +114,20 @@ label {
   color: $h;
 }
 
+textarea {
+  color: $t;
+  width: 100%;
+  height: 100%;
+  border: none;
+  resize: none;
+  box-sizing: border-box;
+  outline: none;
+  padding: 10px;
+  background-color: transparent;
+  font-size: medium;
+  font-family: "Roboto-Mono";
+}
+
 .icon {
   background-color: $h;
   background-image: none;
@@ -207,6 +221,20 @@ label {
 .draw {
   -webkit-mask:  url("./assets/icons/draw.svg") no-repeat 100% 100%;
   mask:  url("./assets/icons/draw.svg") no-repeat 100% 100%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+}
+
+.sigma {
+  -webkit-mask:  url("./assets/icons/sigma.svg") no-repeat 100% 100%;
+  mask:  url("./assets/icons/sigma.svg") no-repeat 100% 100%;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+}
+
+.start {
+  -webkit-mask:  url("./assets/icons/start.svg") no-repeat 100% 100%;
+  mask:  url("./assets/icons/start.svg") no-repeat 100% 100%;
   -webkit-mask-size: cover;
   mask-size: cover;
 }

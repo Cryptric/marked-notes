@@ -1,0 +1,29 @@
+<div class="main-div">
+  <div class="button-bar">
+    <div class="tex-buttons">
+      <span class="icon start" (click)="onCompile()"></span>
+    </div>
+    <div class="nav">
+      <span class="icon close" (click)="close.emit()"></span>
+      <span class="icon done" (click)="done()"></span>
+    </div>
+  </div>
+  <div class="split-div">
+    <as-split direction="horizontal">
+      <as-split-area [size]="50">
+        <div class="textarea-div">
+          <textarea [(ngModel)]="texCode"></textarea>
+        </div>
+      </as-split-area>
+      <as-split-area [size]="50">
+        <div class="preview-div">
+          <img *ngIf="imagePath" class="preview-img" [src]="imagePath | safe" alt="preview">
+        </div>
+      </as-split-area>
+    </as-split>
+  </div>
+  <div class="console-div">
+    <span #console class="console">
+    </span>
+  </div>
+</div>

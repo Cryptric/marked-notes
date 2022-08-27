@@ -22,7 +22,7 @@
   width: 300px;
 }
 
-.whiteboard-div {
+.whiteboard-div, .texeditor-div {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -33,7 +33,7 @@
   align-items: center;
 }
 
-.whiteboard {
+.whiteboard, .tex-editor {
   width: 90%;
   height: 90%;
 }

@@ -1,3 +1,4 @@
+import * as svgToTinyDataUri from "mini-svg-data-uri";
 import { DirNode } from "./dir-node";
 import { EncryptedDirNode } from "./encrypted-dir-node";
 import { Notebook } from "./notebook";
@@ -5,6 +6,7 @@ import { Notebook } from "./notebook";
 export class EncryptedNotebook extends Notebook {
 
   public override dir: EncryptedDirNode;
+  public override isEncryptedNotebook: boolean = true;
 
   public override readNotebook(fs: any) {
     let jsonBook = fs.readFileSync(this.path + "/" + this.name + ".json");
@@ -113,7 +115,22 @@ export class EncryptedNotebook extends Notebook {
     let fileName = this.getNewImageName(fs, Notebook.SKETCH_NAME_REGEX, "sketch");
     fileName = fileName + ".svg";
 
-    let img = 'data:image/svg+xml;utf8,' + data;
+    let img = svgToTinyDataUri(data);
+
+    let imgNode = new EncryptedDirNode(this.path + "/images/" + fileName, fileName, false, this);
+    imgNode.parent = imgDir;
+    imgNode.content = img;
+    imgDir.children.push(imgNode);
+    return imgNode;
+  }
+
+  public saveTex(data, fs: any): DirNode {
+    let imgDir = this.dir.children.filter((element) => element.name === "images")[0];
+
+    let fileName = this.getNewImageName(fs, Notebook.TEX_NAME_REGEX, "tex");
+    fileName = fileName + ".svg";
+
+    let img = svgToTinyDataUri(data);
 
     let imgNode = new EncryptedDirNode(this.path + "/images/" + fileName, fileName, false, this);
     imgNode.parent = imgDir;

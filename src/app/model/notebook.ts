@@ -4,6 +4,8 @@ export class Notebook {
 
   public static IMAGE_NAME_REGEX = new RegExp(/img-\d+\..*/gm)
   public static SKETCH_NAME_REGEX = new RegExp(/sketch-\d+\..*/gm)
+  public static TEX_NAME_REGEX = new RegExp(/tex-\d+\..*/gm)
+
 
   public name: string;
   public path: string;
@@ -77,6 +79,21 @@ export class Notebook {
 
   public saveSketch(data, fs: any): DirNode {
     let fileName = this.getNewImageName(fs, Notebook.SKETCH_NAME_REGEX, "sketch");
+    fileName = fileName + ".svg";
+
+    let filePath = this.path + "/images/" + fileName;
+
+    fs.writeFileSync(filePath, data);
+
+    let dirNode = new DirNode(filePath, fileName, false, this);
+    let imgDir = this.dir.children.filter((element) => element.name === "images")[0];
+    imgDir.children.push(dirNode);
+
+    return dirNode;
+  }
+
+  public saveTex(data, fs: any): DirNode {
+    let fileName = this.getNewImageName(fs, Notebook.TEX_NAME_REGEX, "tex");
     fileName = fileName + ".svg";
 
     let filePath = this.path + "/images/" + fileName;

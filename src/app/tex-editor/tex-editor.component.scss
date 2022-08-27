@@ -1,0 +1,62 @@
+@use '../../styles.scss' as s;
+
+.main-div {
+  width: 100%;
+  height: 100%;
+  background-color: s.$b;
+}
+
+.textarea-div {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+.button-bar {
+  background-color: s.$bc;
+  display: flex;
+  width: 100%;
+}
+
+.tex-buttons {
+  justify-self: start;
+}
+
+.nav {
+  justify-self: end;
+  margin-left: auto;
+}
+
+.split-div {
+  height: 70%;
+  width: 100%;
+}
+
+.preview-div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.preview-img {
+  width: 100%;
+  height: auto;
+}
+
+.console-div {
+  border-top: 2px solid s.$bc;
+  box-sizing: border-box;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 100%;
+  height: 30%;
+}
+
+.console {
+  font-family: s.$f;
+  color: s.$t;
+}

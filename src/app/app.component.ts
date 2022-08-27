@@ -10,6 +10,8 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { EncryptedNotebook } from './model/encrypted-notebook';
 import { EncryptedDirNode } from './model/encrypted-dir-node';
 import { EditorComponent } from './editor/editor.component';
+import { ConfigService } from './helper/config.service';
+import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'app-root',
@@ -38,6 +40,8 @@ export class AppComponent {
 
   public whiteboardOpen: boolean = false;
 
+  public texeditorOpen: boolean = false;
+
   public showPreview = true;
   public showEditor = true;
 
@@ -46,19 +50,15 @@ export class AppComponent {
   public imageFolderPath: string = "";
   public openedFile: DirNode;
 
-  public config: Config;
 
-  private configLoader: ConfigLoader;
-
-  constructor(public electronService: ElectronService, private translate: TranslateService) {
+  constructor(public electronService: ElectronService, private translate: TranslateService, public configService: ConfigService) {
     this.translate.setDefaultLang('en');
     // console.log('APP_CONFIG', APP_CONFIG);
 
     if (electronService.isElectron) {
-      this.configLoader = new ConfigLoader(electronService);
-      this.config = this.configLoader.loadConfig();
-      for (let i = 0; i < this.config.notebooks.length; i++) {
-        this.config.notebooks[i].readNotebook(electronService.fs);
+      this.configService.loadConfig();
+      for (let i = 0; i < this.configService.config.notebooks.length; i++) {
+        this.configService.config.notebooks[i].readNotebook(electronService.fs);
       }
 
       // console.log(process.env);
@@ -105,9 +105,9 @@ export class AppComponent {
     notebook.createNotebook(this.electronService.fs);
     notebook.readNotebook(this.electronService.fs);
 
-    this.config.notebooks.push(notebook);
-    this.config.notebooks = [].concat(this.config.notebooks); // to trigger ngOnChange
-    this.configLoader.saveConfig(this.config);
+    this.configService.config.notebooks.push(notebook);
+    this.configService.config.notebooks = [].concat(this.configService.config.notebooks); // to trigger ngOnChange
+    this.configService.saveConfig();
 
     this.newNotebookDialogOpen = false;
     this.newNotebookName = "";
@@ -188,26 +188,26 @@ export class AppComponent {
           } else {
             // notebook
             let i = -1;
-            this.config.notebooks.forEach((value, index) => {
+            this.configService.config.notebooks.forEach((value, index) => {
               if (value == this.openedFile.notebook) {
                 i = index;
               }
             });
             this.openedFile.notebook.remove(this.electronService.fs);
-            this.config.notebooks.splice(i, 1);
-            this.configLoader.saveConfig(this.config);
+            this.configService.config.notebooks.splice(i, 1);
+            this.configService.saveConfig();
           }
         } else {
           this.electronService.fs.rmdirSync(path, { recursive: true });
           let i = -1;
-          this.config.notebooks.forEach((value, index) => {
+          this.configService.config.notebooks.forEach((value, index) => {
             if (value.path === path) {
               i = index;
             }
           });
           if (i != 0) {
-            this.config.notebooks.splice(i, 1);
-            this.configLoader.saveConfig(this.config);
+            this.configService.config.notebooks.splice(i, 1);
+            this.configService.saveConfig();
           }
         }
       } else {
@@ -270,7 +270,7 @@ export class AppComponent {
         this.openedFile.name = this.renameName;
         this.openedFile.notebook.dir.rebuildPath(oldPath.substring(0, oldPath.length - this.openedFile.notebook.name.length));
         this.openedFile.notebook.name = this.renameName;
-        this.configLoader.saveConfig(this.config);
+        this.configService.saveConfig();
 
         if (this.openedFile.notebook instanceof EncryptedNotebook) {
           this.openedFile.notebook.rename(this.electronService.fs, oldPath, oldName);
@@ -323,6 +323,16 @@ export class AppComponent {
       this.editorComponent.insert(md);
     }
     this.whiteboardOpen = false;
+  }
+
+  public insertTex(data) {
+    if (this.openedFile) {
+      let node = this.openedFile.notebook.saveTex(data, this.electronService.fs);
+      this.addTreeImage(node);
+      let md = "![tex](" + node.name + ")";
+      this.editorComponent.insert(md);
+    }
+    this.texeditorOpen = false;
   }
 
 }
