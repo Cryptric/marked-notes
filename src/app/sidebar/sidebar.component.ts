@@ -2,6 +2,7 @@ import { ThisReceiver } from '@angular/compiler';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { TreeComponent } from '@circlon/angular-tree-component';
 import { DirNode } from '../model/dir-node';
+import { EncryptedNotebook } from '../model/encrypted-notebook';
 import { Notebook } from '../model/notebook';
 
 @Component({
@@ -18,6 +19,7 @@ export class SidebarComponent implements OnInit, OnChanges {
   @Output() newFile = new EventEmitter();
   @Output() delete = new EventEmitter();
   @Output() renameEvent = new EventEmitter();
+  @Output() requestEncryption = new EventEmitter();
 
   @ViewChild(TreeComponent)
   private tree: TreeComponent;
@@ -41,8 +43,12 @@ export class SidebarComponent implements OnInit, OnChanges {
 
   private notebookToTree(notebook: Notebook): void {
     let root: DirNode = notebook.dir;
-    this.nodes.push(this.dfs(root));
-
+    if (!(notebook instanceof EncryptedNotebook ) || notebook.isPasswordSet()) {
+      this.nodes.push(this.dfs(root));
+    } else {
+      let treeNode = { name: notebook.name, children: [], dirNode: root, encrypted: true, notebook: notebook};
+      this.nodes.push(treeNode);
+    };
   }
 
   private dfs(node: DirNode): any {
@@ -53,13 +59,31 @@ export class SidebarComponent implements OnInit, OnChanges {
         treeNode.children.push(this.dfs(child));
       }
     }
-
     return treeNode;
+  }
+
+  public addEncryptedNotebook(notebook: Notebook): void {
+    let root = notebook.dir;
+    let treeNode = this.dfs(root);
+    let children = treeNode.children;
+    this.nodes.forEach(element => {
+      if (element.id == this.activeTreeNode.id) {
+        element.children = children;
+        element.notebook = undefined;
+        element.encrypted = false;
+        element.dirNode = root;
+      }
+    });
+    this.tree.treeModel.update();
   }
 
   public onNodeActivate(event: any) {
     this.activeTreeNode = event.node;
-    this.selectedFile.emit(event.node.data.dirNode);
+    if (this.activeTreeNode.data.encrypted) {
+      this.requestEncryption.emit();
+    } else {
+      this.selectedFile.emit(event.node.data.dirNode);
+    }
   }
 
   public addNode(dirNode: DirNode): void {

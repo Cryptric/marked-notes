@@ -44,7 +44,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
 }
 
-input[type="text"] {
+input[type="text"], input[type="password"] {
   border: none;
   background: none;
   border-bottom: 1px solid $h;
@@ -74,11 +74,18 @@ input[type="text"] {
     &:checked ~ .checkmark:after {
       display: block;
     }
+  }
 
+  input:disabled ~.checkmark {
+    border-color: $hc;
+  }
+
+  input:disabled ~.checkmark:after {
+    border-color: $hc;
   }
 
   .checkmark:after {
-    left: 6px;
+    left: 5px;
     top: 1px;
     width: 5px;
     height: 10px;
@@ -105,7 +112,6 @@ input[type="text"] {
     position: absolute;
     display: none;
   }
-
 }
 
 label {

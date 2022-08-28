@@ -55,6 +55,7 @@
     "@angular/router": "14.0.6",
     "@circlon/angular-tree-component": "11.0.4",
     "angular-split": "13.2.0",
+    "crypto-js": "4.1.1",
     "emoji-toolkit": "6.6.0",
     "katex": "0.16.0",
     "mermaid": "9.1.3",

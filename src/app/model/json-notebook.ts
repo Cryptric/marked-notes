@@ -6,7 +6,7 @@ import { Notebook } from "./notebook";
 export class JSONNotebook extends Notebook {
 
   public override dir: JSONDirNode;
-  public override isEncryptedNotebook: boolean = true;
+  public override isJSONNotebook: boolean;
 
   public override readNotebook(fs: any) {
     let jsonBook = fs.readFileSync(this.path + "/" + this.name + ".json");
@@ -16,7 +16,7 @@ export class JSONNotebook extends Notebook {
     this.assignNodes(this.dir, null);
   }
 
-  private assignNodes(node: JSONDirNode, parent: JSONDirNode) {
+  public assignNodes(node: JSONDirNode, parent: JSONDirNode) {
     for (let i = 0; i < node.children.length; i++) {
       node.children[i] = Object.assign(new JSONDirNode(), node.children[i]);
       node.children[i].notebook = this;

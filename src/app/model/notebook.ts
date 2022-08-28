@@ -11,6 +11,7 @@ export class Notebook {
   public path: string;
 
   public dir: DirNode;
+  public isJSONNotebook: boolean = false;
   public isEncryptedNotebook: boolean = false;
 
   constructor() {

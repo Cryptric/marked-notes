@@ -1,9 +1,6 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
 import { ElectronService } from './core/services';
 import { TranslateService } from '@ngx-translate/core';
-import { APP_CONFIG } from '../environments/environment';
-import { ConfigLoader } from './helper/config-loader';
-import { Config } from './model/config';
 import { Notebook } from './model/notebook';
 import { DirNode } from './model/dir-node';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -11,7 +8,7 @@ import { JSONNotebook } from './model/json-notebook';
 import { JSONDirNode } from './model/json-dir-node';
 import { EditorComponent } from './editor/editor.component';
 import { ConfigService } from './helper/config.service';
-import { ThisReceiver } from '@angular/compiler';
+import { EncryptedNotebook } from './model/encrypted-notebook';
 
 @Component({
   selector: 'app-root',
@@ -30,6 +27,11 @@ export class AppComponent {
   public newNotebookName: string = "";
   public newNotebookLocation: string = "";
   public newNotebookJson: boolean = false;
+  public newNotebookEncrypted: boolean = false;
+  public newNotebookPassword: string = "";
+
+  public passwordDialogOpen: boolean = false;
+  public password: string = "";
 
   public newFolderDialogOpen: boolean = false;
   public newFileDialogOpen: boolean = false;
@@ -58,7 +60,9 @@ export class AppComponent {
     if (electronService.isElectron) {
       this.configService.loadConfig();
       for (let i = 0; i < this.configService.config.notebooks.length; i++) {
-        this.configService.config.notebooks[i].readNotebook(electronService.fs);
+        if (!this.configService.config.notebooks[i].isEncryptedNotebook) {
+          this.configService.config.notebooks[i].readNotebook(electronService.fs);
+        }
       }
 
       // console.log(process.env);
@@ -98,7 +102,10 @@ export class AppComponent {
   }
 
   public createNewNotebook(): void {
-    let notebook = this.newNotebookJson? new JSONNotebook() : new Notebook();
+    let notebook = (this.newNotebookJson || this.newNotebookEncrypted)? (this.newNotebookEncrypted? new EncryptedNotebook : new JSONNotebook()) : new Notebook();
+    if (notebook instanceof EncryptedNotebook) {
+      notebook.setPassword(this.newNotebookPassword);
+    }
 
     notebook.name = this.newNotebookName;
     notebook.path = this.newNotebookLocation;
@@ -112,6 +119,7 @@ export class AppComponent {
     this.newNotebookDialogOpen = false;
     this.newNotebookName = "";
     this.newNotebookLocation = "";
+    this.newNotebookPassword = "";
   }
 
   public openDirectoryDialog(): void {
@@ -309,6 +317,22 @@ export class AppComponent {
     }
     this.renameName = "";
     this.renameDialogOpen = false;
+  }
+
+  public closePasswordDialog(): void {
+    this.passwordDialogOpen = false;
+    this.password = "";
+  }
+
+  public decryptNotebook() {
+    if (this.password) {
+      let notebook = this.sidebarComponent.activeTreeNode.data.notebook;
+      notebook.setPassword(this.password);
+      notebook.readNotebook(this.electronService.fs);
+      this.sidebarComponent.addEncryptedNotebook(notebook);
+    }
+    this.passwordDialogOpen = false;
+    this.password = "";
   }
 
   public addTreeImage(event) {
