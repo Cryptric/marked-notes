@@ -324,6 +324,36 @@ export class AppComponent {
     this.password = "";
   }
 
+  @HostListener('document:keydown.esc')
+  private closeDialog(): void {
+    if (this.newNotebookDialogOpen) {
+      this.newNotebookDialogOpen = false;
+    } else if (this.newFolderDialogOpen) {
+      this.newFolderDialogOpen = false;
+    } else if (this.newFileDialogOpen) {
+      this.newFileDialogOpen = false;
+    } else if (this.renameDialogOpen) {
+      this.renameDialogOpen = false;
+    } else if (this.passwordDialogOpen) {
+      this.closePasswordDialog();
+    }
+  }
+
+  @HostListener('document:keydown.enter')
+  private applyDialog(): void {
+    if (this.newNotebookDialogOpen) {
+      this.createNewNotebook();
+    } else if (this.newFolderDialogOpen) {
+      this.createNewFileFolder();
+    } else if (this.newFileDialogOpen) {
+      this.createNewFileFolder();
+    } else if (this.renameDialogOpen) {
+      this.rename();
+    } else if (this.passwordDialogOpen) {
+      this.decryptNotebook();
+    }
+  }
+
   public decryptNotebook() {
     if (this.password) {
       let notebook = this.sidebarComponent.activeTreeNode.data.notebook;

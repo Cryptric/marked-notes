@@ -22,6 +22,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { WhiteboardComponent } from './whiteboard/whiteboard.component';
 import { TexEditorComponent } from './tex-editor/tex-editor.component';
 import { SafePipe } from './helper/safe.pipe';
+import { AutofocusDirective } from './helper/autofocus.directive';
 
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -34,7 +35,8 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new Transl
     SidebarComponent,
     WhiteboardComponent,
     TexEditorComponent,
-    SafePipe
+    SafePipe,
+    AutofocusDirective
   ],
   imports: [
     BrowserModule,
