@@ -15,6 +15,7 @@ import { AppComponent } from './app.component';
 import { AngularSplitModule } from 'angular-split';
 import { MarkdownModule } from 'ngx-markdown';
 import { TreeModule } from '@circlon/angular-tree-component';
+import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 
 import { PreviewComponent } from './preview/preview.component';
 import { EditorComponent } from './editor/editor.component';
@@ -23,6 +24,8 @@ import { WhiteboardComponent } from './whiteboard/whiteboard.component';
 import { TexEditorComponent } from './tex-editor/tex-editor.component';
 import { SafePipe } from './helper/safe.pipe';
 import { AutofocusDirective } from './helper/autofocus.directive';
+
+import 'codemirror/mode/markdown/markdown';
 
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -55,7 +58,8 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new Transl
     MarkdownModule.forRoot({
       sanitize: SecurityContext.NONE
     }),
-    TreeModule
+    TreeModule,
+    CodemirrorModule
   ],
   providers: [ ],
   bootstrap: [AppComponent]

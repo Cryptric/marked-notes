@@ -1,3 +1,6 @@
+@import '~codemirror/lib/codemirror';
+@import '~codemirror/theme/monokai';
+
 $h: #8E05C2;
 $hc: #500B67;
 $hcc: #3E065F;
@@ -244,6 +247,31 @@ textarea {
   -webkit-mask-size: cover;
   mask-size: cover;
 }
+
+/***** Codemirror styling *****/
+.CodeMirror {
+  height: 100%;
+
+  pre.CodeMirror-line {
+    color: $t;
+    font-size: medium;
+    font-family: "Roboto-Mono";
+  }
+}
+
+.CodeMirror-scroll {
+  padding-left: 10px;
+  padding-top: 10px;
+}
+
+.cm-s-monokai.CodeMirror {
+  background: $b;
+}
+
+.cm-s-monokai span.cm-comment {
+  color: $h2;
+}
+
 
 /***** Angular Split styling *****/
 .as-split-gutter {

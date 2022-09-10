@@ -1,6 +1,9 @@
+import { jsDocComment } from '@angular/compiler';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { DirNode } from '../model/dir-node';
 import { Notebook } from '../model/notebook';
+
+import * as CodeMirror from 'codemirror';
 
 @Component({
   selector: 'app-editor',
@@ -11,7 +14,7 @@ export class EditorComponent implements OnInit {
 
   private static SAVE_DELAY = 1000;
 
-  @ViewChild('textArea') textArea: ElementRef;
+  @ViewChild('editor') editor;
 
   @Input() markdownCode: string;
 
@@ -24,6 +27,7 @@ export class EditorComponent implements OnInit {
   @Input() notebook: Notebook;
 
   private saveScheduled = false;
+
 
   constructor() { }
 
@@ -51,11 +55,11 @@ export class EditorComponent implements OnInit {
   }
 
   public insert(value: string) {
-    let cursorPos = this.textArea.nativeElement.selectionStart;
-    this.markdownCode = this.markdownCode.substring(0, cursorPos) + value + this.markdownCode.substring(cursorPos);
+    //let cursorPos = this.textArea.nativeElement.selectionStart;
+    //this.markdownCode = this.markdownCode.substring(0, cursorPos) + value + this.markdownCode.substring(cursorPos);
+    const cursor = this.editor.codeMirror.getDoc().getCursor();
+    this.editor.codeMirror.getDoc().replaceRange(value, cursor);
     this.onChange();
   }
-
-
 
 }

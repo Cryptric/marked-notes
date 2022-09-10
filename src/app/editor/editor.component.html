@@ -1,3 +1,3 @@
 <div class="content-div">
-  <textarea id="editor-textarea" #textArea (paste)="paste($event)" [(ngModel)]="markdownCode" (ngModelChange)="onChange()" (blur)="emitSave()">hello</textarea>
+  <ngx-codemirror class="editor-area" #editor (paste)="paste($event)" [(ngModel)]="markdownCode" (ngModelChange)="onChange()" (blur)="emitSave()" [options]="{lineNumbers: false, theme: 'monokai', mode: 'markdown', lineWrapping: true}"></ngx-codemirror>
 </div>

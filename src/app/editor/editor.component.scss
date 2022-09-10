@@ -1,6 +1,10 @@
 @use '../../styles.scss' as s;
 
 .content-div {
-  padding: 0px;
+  padding: 0;
   overflow: hidden;
+}
+
+.editor-area {
+  height: 100%;
 }
