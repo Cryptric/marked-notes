@@ -26,6 +26,7 @@ import { SafePipe } from './helper/safe.pipe';
 import { AutofocusDirective } from './helper/autofocus.directive';
 
 import 'codemirror/mode/markdown/markdown';
+import 'codemirror/mode/stex/stex';
 
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new TranslateHttpLoader(http, './assets/i18n/', '.json');
