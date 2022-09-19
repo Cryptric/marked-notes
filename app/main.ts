@@ -19,6 +19,7 @@ function createWindow(): BrowserWindow {
     y: 40,
     width: 1920,
     height: 1080,
+    icon: path.join(__dirname, "favicon.256x256.png"),
     webPreferences: {
       nodeIntegration: true,
       allowRunningInsecureContent: (serve) ? true : false,
