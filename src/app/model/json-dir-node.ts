@@ -1,8 +1,8 @@
-import { DirNode } from "./dir-node";
+import { DirNode } from './dir-node';
 
 export class JSONDirNode extends DirNode {
 
-  public override children: Array<JSONDirNode>;
+  declare public children: Array<JSONDirNode>;
   public parent: JSONDirNode;
 
   public content: string = "";

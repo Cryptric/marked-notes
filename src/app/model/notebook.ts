@@ -55,7 +55,9 @@ export class Notebook {
     let fileName = this.getNewImageName(fs, Notebook.IMAGE_NAME_REGEX, "img");
     fileName = fileName + file.name.substring(file.name.lastIndexOf('.'), file.name.length);
     let filePath = this.path + "/images/" + fileName;
+
     fs.copyFileSync(file.path, filePath);
+    //fs.writeFileSync(filePath, file);
 
     let dirNode = new DirNode(filePath, fileName, false, this);
     let imgDir = this.dir.children.filter((element) => element.name === "images")[0];

@@ -1,15 +1,15 @@
 @import '~codemirror/lib/codemirror';
 @import '~codemirror/theme/monokai';
 
-$h: #8E05C2;
-$hc: #500B67;
-$hcc: #3E065F;
+$h: var(--bs-primary);
+$hc: var(--bs-secondary);
+$hcc: var(--bs-secondary);
 
-$h2: #00FFFF;
+$h2: #8555ff;
 
-$b: #0A0A0A;
+$b: var(--bs-gray-900);
 $bc: #161616;
-$bcc: #262626;
+$bcc: var(--bs-gray-800);
 
 $t: #b5b5b5;
 
@@ -23,7 +23,7 @@ body, html {
   width: 100%;
   overflow: hidden;
 
-  background-color: $b;
+  background-color: $b !important;
 }
 
 p {
@@ -275,7 +275,7 @@ textarea {
 
 /***** Angular Split styling *****/
 .as-split-gutter {
-  background-color: $bcc !important;
+  background-color: $bc !important;
 }
 
 /***** Tree styling *****/
