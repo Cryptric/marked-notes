@@ -30,6 +30,7 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/stex/stex';
+import 'codemirror/keymap/sublime'
 
 // AoT requires an exported function for factories
 const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>  new TranslateHttpLoader(http, './assets/i18n/', '.json');

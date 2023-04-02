@@ -12,6 +12,15 @@ import * as CodeMirror from 'codemirror';
 })
 export class EditorComponent implements OnInit {
 
+  keyMap = {
+    // @ts-ignore
+    'Alt-Up': CodeMirror.commands.swapLineUp,
+    // @ts-ignore
+    'Alt-Down': CodeMirror.commands.swapLineDown,
+  };
+
+  editorConfig = { lineNumbers: false, theme: 'monokai', mode: 'markdown', lineWrapping: true, keyMap: 'sublime', extraKeys: this.keyMap };
+
   private static SAVE_DELAY = 1000;
 
   @ViewChild('editor') editor;
