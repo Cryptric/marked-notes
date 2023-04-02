@@ -27,6 +27,8 @@ import { AutofocusDirective } from './helper/autofocus.directive';
 
 import 'codemirror/mode/markdown/markdown';
 import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/verilog/verilog';
+import 'codemirror/mode/haskell/haskell';
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/stex/stex';
