@@ -19,7 +19,7 @@ export class EditorComponent implements OnInit {
     'Alt-Down': CodeMirror.commands.swapLineDown,
   };
 
-  editorConfig = { lineNumbers: false, theme: 'monokai', mode: 'markdown', lineWrapping: true, keyMap: 'sublime', extraKeys: this.keyMap };
+  editorConfig = { lineNumbers: false, theme: 'monokai', mode: 'markdown', lineWrapping: true, keyMap: 'sublime', extraKeys: this.keyMap, matchBrackets: true, autoCloseBrackets: true};
 
   private static SAVE_DELAY = 1000;
 
